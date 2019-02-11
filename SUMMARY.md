@@ -20,4 +20,6 @@
     * [Shortcuts](Git/shortcuts.md)
 * [Vscode](Vscode.md)
     * [Shortcuts](Vscode/shortcuts.md)
+* [Typora](Typora.md)
+    * [Shortcuts](Typora/shortcuts.md)
 
