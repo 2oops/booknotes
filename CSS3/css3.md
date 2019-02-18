@@ -159,5 +159,260 @@
   * nth-child(n)
 
     * :nth-child(n)”选择器中的n为一个表达式时，其中n是从0开始计算，当表达式的值为0或小于0的时候，不选择任何匹配的元素
+
   * nth-last-child(n) (从某父元素的最后一个子元素开始计算，选择倒数第n个) 
+
+  * first-of-type：`:first-of-type`选择器类似于“:first-child”选择器，不同之处就是**指定了元素的类型**,其主要用来定位一个父元素下的某个类型的第一个子元素
+
+  * last-of-type：
+
+    ```css
+    .wrapper > div:last-of-type{
+     	 background: orange;
+    }
+    ```
+
+  * nth-last-of-type(n)
+
+  * only-child: 选择器选择的是父元素中只有一个子元素，而且只有唯一的一个子元素
+
+  * only-of-type: 表示一个元素他有很多个子元素，而其中只有一种类型的子元素是唯一的
+
+6. 征服CSS选择器
+
+  * enabled disabled:
+
+      ```css
+      input[type="text"]:enabled{
+        border: 1px solid #f36;
+        box-shadow: 0 0 5px #f36;
+      }
+      input[type="text"]:disabled{
+        	  box-shadow: none;
+      }
+      ```
+
+  * checked
+
+  * ::selection   `::selection`伪元素是用来匹配突出显示的文本(用鼠标选择文本时的文本)。浏览器默认情况下，用鼠标选择网页文本是以“深蓝的背景，白色的字体”显示的
+    ```html
+    <body>
+    <p>“::selection”伪元素是用来匹配突出显示的文本。浏览器默认情况下，选择网站文本		是深蓝的背景，白色的字体，
+    有的设计要求不使用上图那种浏览器默认的突出文本效果，需要一个与众不同的效果，此		时“::selection”伪元素就非常的实用。不过在Firefox浏览器还需要添加前缀。</p>
+    </body>
+    ```
+
+    ```css
+    ::selection{
+      background: orange;
+      color: white;
+    }
+    //firefox需要加前缀
+    ::-moz-selection{
+      background: orange;
+      color: white;
+    }
+    ```
+
+* read-only：需Html代码中设置`readonly="readonly"`
+
+* read-write: 效果与`read-only`正好相反
+
+* before after   主要用来给元素的前面或后面插入内容，这两个常和"content"配合使用，使用的场景最多的就是清除浮动
+
+  ```css
+  .clearfix::before,
+  .clearfix::after {
+      content: ".";
+      display: block;
+      height: 0;
+      visibility: hidden;
+  }
+  .clearfix:after {clear: both;}
+  .clearfix {zoom: 1;}
+  ```
+7. CSS变形与动画
+  * rotate(45deg)  旋转
+
+  * skew(45deg)  扭曲  `skew(X,Y)`第一个参数对应X轴，第二个参数对应Y轴。如果第二个参数未提供，则值为0，也就是Y轴方向上无斜切。skewX(),skewY()
+
+  * scale(1.5)  缩放 `scale(X,Y)`  scale()的取值默认的值为1，当值设置为0.01到0.99之间的任何值，作用使一个元素缩小；而任何大于或等于1.01的值，作用是让元素放大  scaleX(),scaleY()
+
+  * translate(X,Y)  把元素从原来的位置移动，而不影响在X、Y轴上的任何Web组件
+    ```css
+    .wrapper {
+      padding: 20px;
+      background:orange;
+      color:#fff;
+      position:absolute;
+      top:50%;
+      left:50%;
+      border-radius: 5px;
+      -webkit-transform:translate(-50%,-50%);
+      -moz-transform:translate(-50%,-50%);
+      transform:translate(-50%,-50%);//垂直水平居中
+    }
+    ```
+
+  * 矩阵matrix() `matrix(1,0,0,1,50,50)`实现的是`translate(100px,100px)`的效果
+
+  * transform-origin
+    ```css
+    .transform-origin div {
+      -webkit-transform-origin: left top;
+      transform-origin: left top;
+    }
+    ```
+
+  * transition-property 需要过渡状态的属性
+    * transition-property:指定过渡或动态模拟的CSS属性
+    * transition-timing-function:指定过渡函数
+    * transition-delay:指定开始出现的延迟时间
+
+  * transition-duration  过渡所需时间
+    ```css
+    div {
+      width: 300px;
+      height: 200px;
+      background-color: orange;
+      margin: 20px auto;
+      -webkit-transition-property: height;
+      transition-property: height;
+      -webkit-transition-duration？: 1s;
+      transition-duration: 1s;
+      -webkit-transition-timing-function: ease-out;
+      transition-timing-function: ease-out;
+      -webkit-transition-delay: .2s;
+      transition-delay: .2s;
+    }
+    div:hover {
+      height: 100px;
+    }
+    ```
+
+  * transition-timing-function  过渡函数
+    ```css
+    div {
+      width: 200px;
+      height: 200px;
+      background-color: orange;
+      margin: 20px auto;
+      border-radius: 100%;
+      -webkit-transition-property: -webkit-border-radius;
+      transition-property: border-radius;
+      -webkit-transition-duration: 1s;
+      transition-duration: 1s;
+      -webkit-transition-timing-function: ease-in-out;
+      transition-timing-function: ease-in-out;
+      -webkit-transition-delay: .2s;
+      transition-delay: .2s;
+    }
+    div:hover {
+      border-radius: 0px;
+    }
+    ```
+
+  * transition-delay 过渡延迟函数
+
+  * @keyframes chrome和safari需加前缀
+    ```css
+    @-webkit-keyframes changecolor{
+      0%{
+    background: red;
+      }
+      20%{
+    background:blue;
+      }
+      40%{
+    background:orange;
+      }
+      60%{
+    background:green;
+      }
+      80%{
+    background:yellow;
+      }
+      100%{
+    background: red;
+      }
+    }
+    div {
+      width: 300px;
+      height: 200px;
+      background: red;
+      color:#fff;
+      margin: 20px auto;
+    }
+    div:hover {
+      -webkit-animation: changecolor 5s ease-out .2s;
+    }
+    ```
+
+  * animation-name  主要是用来调用 @keyframes 定义好的动画。需要特别注意: animation-name 调用的动画名需要和“@keyframes”定义的动画名称完全一致（区分大小写），如果不一致将不具有任何动画效果
+    ```css
+    @keyframes around{
+      0% {
+    transform: translateX(0);
+      }
+      25%{
+    transform: translateX(180px);
+      }
+      50%{
+     transform: translate(180px, 180px); 
+      }
+      75%{
+    transform:translate(0,180px);
+      }
+      100%{
+    transform: translateY(0);
+      }
+    }
+    div {
+      width: 200px;
+      height: 200px;
+      border: 1px solid red;
+      margin: 20px auto;
+    }
+    div span {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      background: orange;
+      border-radius: 100%;
+      animation-name:around;
+      animation-duration: 10s;
+      animation-timing-function: ease;
+      animation-delay: 1s;
+      animation-iteration-count:infinite;
+    }
+    ```
+
+  * animation-duration
+
+  * animation-timing-function
+    ```
+    animation-timing-function:ease | linear | ease-in | ease-out | ease-in-out | cubic-bezier(<number>, <number>, <number>, <number>) [, ease | linear | ease-in | ease-out | ease-in-out | cubic-bezier(<number>, <number>, <number>, <number>)]*
+    ```
+
+  * animation-delay
+
+  * animation-iteration-count 动画播放次数
+
+  * animation-direction 
+    *Chrome和safari需前缀，主要有两个值，`normal`和`alternate`，前者为默认，动画每次播放都是向前播放，后者动画播放在第偶数次向前，第奇数次向反方向。
+
+  * animation-play-state 
+
+    * 主要用来控制元素动画的播放状态，主要有两个值：`running`和`paused`，前者为默认值
+
+  * animation-fill-mode
+
+    | 默认值    | 效果                                                         |
+    | --------- | ------------------------------------------------------------ |
+    | none      | 默认值，表示动画将按预期进行和结束，在动画完成其最后一帧时，动画会反转到初始帧处 |
+    | forwards  | 表示动画在结束后继续应用最后的关键帧的位置                   |
+    | backwords | 会在向元素应用动画样式时迅速应用动画的初始帧                 |
+    | both      | 元素动画同时具有forwards和backwards效果                      |
+
+  * 3D旋转导航 [参考](https://www.imooc.com/code/1883)
   * 
