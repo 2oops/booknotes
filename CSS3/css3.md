@@ -415,4 +415,86 @@
     | both      | 元素动画同时具有forwards和backwards效果                      |
 
   * 3D旋转导航 [参考](https://www.imooc.com/code/1883)
-  * 
+8. 布局样式
+  * columns
+    *` column-width: auto | <200px>`
+    * `column-count: auto | <integer>`
+    * `columns-gap: normal | 2em`
+    * column-rule  主要是用来定义列与列之间的边框宽度、边框样式和边框颜色* 规则：`column-rule:<column-rule-width>|<column-rule-style>|<column-rule-color>`
+    * `column-span: none | all`
+  * 盒子模型
+    * box-sizing
+    ```css
+    #footer {
+      -webkit-box-sizing: border-box;
+      -moz--box-sizing: border-box;
+      -o--box-sizing: border-box;
+      -ms--box-sizing: border-box;
+      box-sizing:border-box;
+    }
+    ```
+  * 伸缩布局 flexbox
+    1. 屏幕和浏览器窗口大小发生改变也可以灵活调整布局
+    2. 可以指定伸缩项目沿着主轴或侧轴按比例分配额外空间（伸缩容器额外空间），从而调整伸缩项目的大小
+    2. 可以指定伸缩项目沿着主轴或侧轴将伸缩容器额外空间，分配到伸缩项目之前、之后或之间
+    4. 可以控制元素在页面上的布局方向
+    5. 可以指定如何将垂直于元素布局轴的额外空间分布到该元素的周围
+    6. 可以按照不同于文档对象模型（DOM）所指定排序方式对屏幕上的元素重新排序。也就是说可以在浏览器渲染中不按照文档流先后顺序重排伸缩项目顺序
+    * `.flexcontainer{ display: -webkit-flex; display: flex; }`
+    * 通过`flex-direction`来改变主轴方向修改为`column`，其默认值是`row`
+    * 如何将flex项目移动到顶部，取决于主轴的方向。如果它是垂直的方向通过`align-items`设置；如果它是水平的方向通过`justify-content`设置
+    * flex项目称动到左边或右边也取决于主轴的方向。如果`flex-direction`设置为`row`，设置`justify-content`控制方向；如果设置为`column`，设置`align-items`控制方向
+    * 水平垂直居中： 设置`justify-content`或者`align-items`为`center`。另外根据主轴的方向设置`flex-direction`为`row`或`column`
+    ```css
+    body {
+      display:flex;
+      align-items: center;
+      justify-content:center;
+    }
+    ```
+    * 实现自动伸缩： 定义一个flex项目，如何相对于flex容器实现自动的伸缩。需要给每个flex项目设置flex属性设置需要伸缩的值(`flex：200`)
+9. Media Queries 与Responsive 设计
+  * Screen、All和Print为最常见的三种媒体类型
+  * 媒体类型的引用方法也有多种，常见的有：link标签、@import和CSS3新增的@media(媒体查询)
+    ```css
+    @media screen and (max-width:480px){
+     .ads {
+       display:none;//当屏幕小于或等于480px时,页面中的广告区块（.ads）都将被隐藏
+      }
+    }
+    ```
+
+  * Responsive设计  简称RWD，不是流体布局，也不是网格布局，而是一种独特的网页设计方法
+    * `Responsive`设计最关注的就是：根据用户的使用设备的当前宽度，你的Web页面将加载一个备用的样式，实现特定的页面风格
+    * `Media Queries`中，其中媒体特性`min-width`和`max-width`对应的属性值就是响应式设计中的断点值。设置断点应把握三个要点：满足主要的断点；有可能的话添加一些别的断点；设置高于1024的桌面断点
+    * <meta name=”viewport” content=”” />
+
+      ![img](http://img.mukewang.com/53660f2c0001190005270386.jpg)
+10. 用户界面
+  * `resize`,允许用户通过拖动的方式来修改元素的尺寸来改变元素的大小。到目前为止，可以使用`overflow`属性的任何容器元素
+    * `resize: none | both | horizontal | vertical | inherit`
+    ```css
+    textarea{
+      resize:none | both | horizontal | vertical | inherit;
+      background:green;
+    }
+    ```
+
+  * `outline: ［outline-color］ || [outline-style] || [outline-width] || [outline-offset] || inherit`
+
+    | 属性值         | 说明                                                         |
+    | -------------- | ------------------------------------------------------------ |
+    | outline-color  | 定义轮廓线的颜色，属性值为CSS中定义的颜色值。在实际应用中，可以将此参数省略，省略时此参数的默认值为黑色。 |
+    | outline-style  | 定义轮廓线的样式，属性为CSS中定义线的样式。在实际应用中，可以将此参数省略，省略时此参数的默认值为none，省略后不对该轮廓线进行任何绘制。 |
+    | outline-width  | 定义轮廓线的宽度，属性值可以为一个宽度值。在实际应用中，可以将此参数省略，省略时此参数的默认值为medium，表示绘制中等宽度的轮廓线。 |
+    | outline-offset | 定义轮廓边框的偏移位置的数值，此值可以取负数值。当此参数的值为正数值，表示轮廓边框向外偏离多少个像素；当此参数的值为负数值，表示轮廓边框向内偏移多少个像素。 |
+    | inherit        | 元素继承父元素的outline效果。                                |
+
+  * CSS生成内容
+    ```css
+    h1:after{
+      content:"我是被插进来的";
+      color: red;
+    }
+    ```
+  * 3D旋转视频展示区 [参考](https://www.imooc.com/code/1963)
