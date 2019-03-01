@@ -24,5 +24,6 @@
 * [Typora](Typora/Typora.md)
     * [Shortcuts](Typora/shortcuts.md)
 * [Neo4j](Neo4j/neo4j.md)
+    * [Commands](Neo4j/Commands.md)
 * [Cesium](Cesium/cesium.md)
 
