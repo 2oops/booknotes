@@ -99,4 +99,42 @@
    <div class="overlay"></div>
    ```
 
-7. 
+   *****
+
+  7. `relative`
+
+       1. 限制定位`left,right,top,bottom`，限制`z-index`(z-index设置为auto时在IE7+对内部元素不起限制作用)，限制`overflow`,relative限制不了`position:fixed`
+       2. relative相对自身定位，`left，right`同时存在时绝对定位实现拉伸，相对定位则斗争。(left>right,top>bottom)
+       3. 层叠上下文
+       4. relative最小化影响原则：relative最小化，尽量避免使用relative
+
+  8. `margin`
+
+       1. ```css
+          .list {
+              margin-top: 15px;
+              margin-bottom: 15px;
+          }
+          ```
+
+       2. relative中使用百分比margin以宽度为准，absolute中使用百分比margin以上一定位元素为准
+
+       3. ```css
+          margin-left: auto;
+          margin-right: auto;//两者都为auto时实现居中效果，但图片（block）不居中
+          ```
+
+       4. `width/height`限制了absolute元素自动填满容器
+
+       5. ```css
+          position: absolute;
+          margin: auto;//自动平分被变更的尺寸空间实现居中
+          ```
+
+       6. margin负值可实现两端对齐`margin-left: -20px; margin-right: 20px;`
+
+       7. 负值下实现等高布局`margin-bottom: -20px; padding-bottom: 20px;`必须使用`overflow: hidden`限制
+
+       8. 负值下实现两栏自适应
+
+       9. margin重叠  `margin-start,margin-end`，设置`direction: ltl`，`writing-mode: vertical-lr;`
