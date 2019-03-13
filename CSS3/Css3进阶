@@ -138,3 +138,19 @@
        8. 负值下实现两栏自适应
 
        9. margin重叠  `margin-start,margin-end`，设置`direction: ltl`，`writing-mode: vertical-lr;`
+
+9. padding
+
+      1. 水平padding影响尺寸，垂直padding不影响尺寸，但会影响背景色（占据空间）
+      2. 使用百分比`div{padding: 50%}`构建固定比例布局结构
+      3. 配合margin实现等高布局`margin-bottom: 10px; padding-bottom: 10px`
+      4. 实现两栏自适应布局
+
+10. overflow
+
+          1. IE8+等浏览器默认`html {overflow: auto}`，想要去除默认滚动条时设置为hidden即可
+          2. ![1552487178590](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1552487178590.png)
+          3. 滚动条宽度约为17px
+          4.  水平居中跳动问题`.container {width: 1150px; margin: 0 auto;}`，修复方法:添加一行：`padding-left: calc(100vw - 100%)` 100%指可用内容宽度，注意减号两边是空格
+          5. ![1552487743420](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1552487743420.png)
+          6. ![1552487779330](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1552487779330.png)
