@@ -200,6 +200,19 @@
             
         </li>
     
+        <li class="chapter " data-level="1.3.3" data-path="../CSS3/Advanced.html">
+            
+                <a href="../CSS3/Advanced.html">
+            
+                    
+                    Advanced
+            
+                </a>
+            
+
+            
+        </li>
+    
 
             </ul>
             
@@ -430,6 +443,167 @@
             
         </li>
     
+        <li class="chapter " data-level="1.14" data-path="../Neo4j/neo4j.html">
+            
+                <a href="../Neo4j/neo4j.html">
+            
+                    
+                    Neo4j
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.14.1" data-path="../Neo4j/Commands.html">
+            
+                <a href="../Neo4j/Commands.html">
+            
+                    
+                    Commands
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.15" data-path="../Cesium/cesium.html">
+            
+                <a href="../Cesium/cesium.html">
+            
+                    
+                    Cesium
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.16" data-path="../ThreeJS/Threejs.html">
+            
+                <a href="../ThreeJS/Threejs.html">
+            
+                    
+                    ThreeJS
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.17" data-path="../Echarts/Echarts.html">
+            
+                <a href="../Echarts/Echarts.html">
+            
+                    
+                    Echarts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.18" data-path="../WebGL/WebGL.html">
+            
+                <a href="../WebGL/WebGL.html">
+            
+                    
+                    WebGL
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.18.1" data-path="../WebGL/Primary.html">
+            
+                <a href="../WebGL/Primary.html">
+            
+                    
+                    Primary
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.18.2" data-path="../WebGL/Intermediate.html">
+            
+                <a href="../WebGL/Intermediate.html">
+            
+                    
+                    Intermediate
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.18.3" data-path="../WebGL/Advanced.html">
+            
+                <a href="../WebGL/Advanced.html">
+            
+                    
+                    Advanced
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.19" data-path="../ProjectExp/ProjectExp.html">
+            
+                <a href="../ProjectExp/ProjectExp.html">
+            
+                    
+                    ProjectExp
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.19.1" data-path="../ProjectExp/vue-three-echarts.html">
+            
+                <a href="../ProjectExp/vue-three-echarts.html">
+            
+                    
+                    vue-three-echarts
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
 
     
 
@@ -476,6 +650,180 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="es5">ES5</h1>
+<ol>
+<li><p>&#x5F31;&#x7C7B;&#x578B;  6&#x79CD;&#x7C7B;&#x578B;&#x5305;&#x62EC;&#x4E00;&#x79CD;&#x5BF9;&#x8C61;&#x7C7B;&#x578B;<code>object</code>&#x548C;5&#x79CD;&#x57FA;&#x672C;&#x7C7B;&#x578B;<code>number,boolean,null,undefined,string</code></p>
+</li>
+<li><p><code>NaN</code>&#x4E0D;&#x7B49;&#x4E8E;<code>NaN</code>&#xFF0C;<code>null === null,undefined === undefined</code></p>
+</li>
+<li><p>&#x7C7B;&#x578B;&#x68C0;&#x6D4B;&#xFF1A;</p>
+<ol>
+<li><p><code>typeof null -&gt; &quot;object&quot;, typeof NaN -&gt; &quot;number&quot;, typeof(undefined) -&gt; &quot;undefined&quot;, typeof [1,2] -&gt; &quot;object&quot;</code></p>
+</li>
+<li><p><code>instanceof</code></p>
+</li>
+<li><p><code>obj instanceof Object</code> </p>
+<p><code>[1,2] instanceof Array === true</code>
+<code>Object.prototype.toString.apply([]); === &quot;[Object Array]&quot;</code>
+<code>Object.prototype.toString.apply(null/undefined); === &quot;[object Null/undefined]&quot;</code>
+<code>Object.protoype.toString.apply(function(){}); === &quot;[object Function]&quot;</code></p>
+</li>
+<li><p><code>constructor</code></p>
+</li>
+<li><pre><code class="lang-javascript"><span class="hljs-comment">// &#x5224;&#x65AD;&#x4E24;&#x4E2A;&#x6570;&#x7EC4;&#x662F;&#x5426;&#x7C7B;&#x578B;&#x76F8;&#x4F3C;&#xFF0C;&#x662F;&#x5219;&#x4E3A;true,&#x5426;&#x5219;&#x4E3A;false</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">type</span>(<span class="hljs-params">a</span>)</span>{
+    <span class="hljs-comment">//&#x89E3;&#x51B3;typeof null&#x4E3A;object&#x60C5;&#x5F62;</span>
+    <span class="hljs-keyword">return</span>  a === <span class="hljs-literal">null</span> ? <span class="hljs-string">&apos;[object Null]&apos;</span>:<span class="hljs-built_in">Object</span>.prototype.toString.apply(a);
+    }
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">arraysSimilar</span>(<span class="hljs-params">arr1, arr2</span>)</span>{
+    <span class="hljs-keyword">if</span>(!<span class="hljs-built_in">Array</span>.isArray(arr1) || !<span class="hljs-built_in">Array</span>.isArray(arr2) ||arr1.length!=arr2.length){<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;}
+    <span class="hljs-keyword">var</span> arr3=[];
+    <span class="hljs-keyword">var</span> arr4=[];
+    <span class="hljs-keyword">var</span> x;
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i <span class="hljs-keyword">in</span> arr1){
+        arr3.push(type(arr1[i]));
+        arr4.push(type(arr2[i]));
+    }
+    <span class="hljs-keyword">if</span>(arr3.sort().toString()==arr4.sort().toString()){
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    }<span class="hljs-keyword">else</span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+</code></pre>
+</li>
+<li><pre><code class="lang-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Foo</span>(<span class="hljs-params"></span>) </span>{}
+Foo.prototype.x = <span class="hljs-number">1</span>;
+<span class="hljs-keyword">var</span> obj = <span class="hljs-keyword">new</span> Foo();
+obj.x;<span class="hljs-comment">//1</span>
+obj.hasOwnProperty(<span class="hljs-string">&apos;x&apos;</span>);<span class="hljs-comment">//false</span>
+obj._proto_.hasOwnProperty(<span class="hljs-string">&apos;x&apos;</span>); <span class="hljs-comment">//true hasOwnProperty&#x8868;&#x793A;&#x7684;&#x662F;&#x5F53;&#x524D;&#x94FE;&#x8282;&#x70B9;&#x662F;&#x5426;&#x542B;&#x6709;&#x8BE5;&#x5C5E;&#x6027;</span>
+</code></pre>
+</li>
+<li><p>JS&#x6CA1;&#x6709;&#x5757;&#x7EA7;&#x4F5C;&#x7528;&#x57DF;&#xFF0C;<code>for in</code>&#x987A;&#x5E8F;&#x4E0D;&#x786E;&#x5B9A;&#xFF0C;<code>enumerable</code>&#x4E3A;<code>false</code>&#x65F6;&#x4E0D;&#x4F1A;&#x51FA;&#x73B0;&#xFF0C;<code>for in</code>&#x5BF9;&#x8C61;&#x5C5E;&#x6027;&#x65F6;&#x53D7;&#x539F;&#x578B;&#x94FE;&#x5F71;&#x54CD;&#xFF0C;&#x53EF;&#x80FD;&#x4F1A;&#x904D;&#x5386;&#x5230;&#x539F;&#x578B;&#x94FE;&#x4E0A;&#x7684;&#x5C5E;&#x6027;</p>
+</li>
+<li><p>&#x4E25;&#x683C;&#x6A21;&#x5F0F;&#xFF1A;&#x4E0D;&#x5141;&#x8BB8;&#x4F7F;&#x7528;<code>with</code>&#xFF0C;&#x4E0D;&#x5141;&#x8BB8;&#x672A;&#x7533;&#x660E;&#x7684;&#x53D8;&#x91CF;&#x8D4B;&#x503C;&#xFF0C;arguments&#x53D8;&#x4E3A;&#x53C2;&#x6570;&#x7684;&#x9759;&#x6001;&#x526F;&#x672C;&#xFF0C;<code>delete</code>&#x53C2;&#x6570;/&#x51FD;&#x6570;&#x540D;&#x62A5;&#x9519;&#xFF0C;&#x7981;&#x6B62;&#x516B;&#x8FDB;&#x5236;&#x5B57;&#x9762;&#x91CF;</p>
+</li>
+<li><p><img src="C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1553178431454.png" alt="1553178431454"></p>
+</li>
+</ol>
+</li>
+<li><p>&#x539F;&#x578B;&#x94FE;</p>
+<ol>
+<li><p>&#x4F7F;&#x7528;&#x70B9;&#x8D4B;&#x503C;&#x65F6;&#x4E5F;&#x662F;&#x76F8;&#x5BF9;&#x4E8E;&#x539F;&#x578B;&#x94FE;&#x4E0A;&#x7684;&#x8BE5;&#x94FE;&#x8282;&#x70B9;&#x7684;&#x64CD;&#x4F5C;&#xFF0C;&#x5E76;&#x4E0D;&#x4F1A;&#x987A;&#x7740;&#x539F;&#x578B;&#x94FE;&#x5411;&#x4E0A;&#x4FEE;&#x6539;&#x5230;&#x67D0;&#x4E2A;&#x5C5E;&#x6027;&#x7684;&#x503C;&#xFF0C;&#x540C;&#x7406;&#xFF0C;&#x5220;&#x9664;&#x8BE5;&#x5C5E;&#x6027;&#x65F6;&#x4E5F;&#x4E0D;&#x4F1A;&#x987A;&#x7740;&#x539F;&#x578B;&#x94FE;&#x5411;&#x4E0A;&#x5220;&#x9664;</p>
+</li>
+<li><p><img src="C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1553179125753.png" alt="1553179125753"></p>
+</li>
+<li><pre><code class="lang-javascript"><span class="hljs-comment">//&#x8DE8;&#x8FC7;&#x8BE5;&#x94FE;&#x8282;&#x70B9;&#x521B;&#x5EFA;&#x5C5E;&#x6027;</span>
+<span class="hljs-keyword">var</span> obj = <span class="hljs-built_in">Object</span>.create({x: <span class="hljs-number">1</span>})
+obj.x;<span class="hljs-comment">//1</span>
+<span class="hljs-keyword">typeof</span> obj.toString; <span class="hljs-comment">//&quot;funciton&quot;</span>
+obj.hasOwnproperty(<span class="hljs-string">&apos;x&apos;</span>);<span class="hljs-comment">//false</span>
+
+<span class="hljs-keyword">var</span> obj = <span class="hljs-built_in">Object</span>.create(<span class="hljs-literal">null</span>);
+obj.toString;<span class="hljs-comment">//undefined</span>
+</code></pre>
+</li>
+<li><pre><code class="lang-js"><span class="hljs-comment">//&#x5C5E;&#x6027;&#x679A;&#x4E3E;</span>
+<span class="hljs-keyword">var</span> o = {x: <span class="hljs-number">1</span>, y: <span class="hljs-number">2</span>, z: <span class="hljs-number">3</span>}
+<span class="hljs-string">&apos;toString&apos;</span> <span class="hljs-keyword">in</span> o;<span class="hljs-comment">// true &#x56E0;&#x4E3A;&#x539F;&#x578B;&#x94FE;&#x4E0A;&#x6709;toString</span>
+o.propertyIsEEnumerable(<span class="hljs-string">&apos;toString&apos;</span>);<span class="hljs-comment">//false</span>
+<span class="hljs-keyword">var</span> key;
+<span class="hljs-keyword">for</span>(key <span class="hljs-keyword">in</span> o) {
+    <span class="hljs-built_in">console</span>.log(key);<span class="hljs-comment">//x,y,z</span>
+}
+
+<span class="hljs-keyword">var</span> obj = <span class="hljs-built_in">Object</span>.create(o);
+obj.a = <span class="hljs-number">4</span>;
+<span class="hljs-keyword">var</span> key;
+<span class="hljs-keyword">for</span> (key <span class="hljs-keyword">in</span> obj) {
+    <span class="hljs-built_in">console</span>.log(key);<span class="hljs-comment">//a,x,y,z</span>
+}
+
+<span class="hljs-keyword">var</span> obj = <span class="hljs-built_in">Object</span>.create(o);
+obj.a = <span class="hljs-number">4</span>;
+<span class="hljs-keyword">var</span> key;
+<span class="hljs-keyword">for</span>(key <span class="hljs-keyword">in</span> obj) {
+    <span class="hljs-keyword">if</span>(obj.hasOwnProperty(key)){
+        <span class="hljs-built_in">console</span>.log(key);<span class="hljs-comment">//a</span>
+    }
+}
+</code></pre>
+</li>
+<li><p>get/set
+<img src="C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1553181215219.png" alt="1553181215219"></p>
+</li>
+<li><p>&#x5C5E;&#x6027;&#x6807;&#x7B7E;&#x53EF;&#x4F7F;&#x7528;<code>defineProperty</code>&#x91CD;&#x590D;&#x4FEE;&#x6539;
+<img src="C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1553181885406.png" alt="1553181885406"></p>
+</li>
+<li><pre><code class="lang-js"><span class="hljs-keyword">var</span> obj2 = {x:<span class="hljs-number">1</span>,y:<span class="hljs-literal">true</span>, z:[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>],nullVal: <span class="hljs-literal">null</span>}
+<span class="hljs-built_in">JSON</span>.stringify(obj2)<span class="hljs-comment">//&quot;{&quot;x&quot;:1,&quot;y&quot;:true,&quot;z&quot;:[1,2,3],&quot;nullVal&quot;:null}&quot;</span>
+<span class="hljs-keyword">var</span> obj3 = {val:<span class="hljs-literal">undefined</span>,a:<span class="hljs-literal">NaN</span>,b:<span class="hljs-literal">Infinity</span>,c:<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()};
+<span class="hljs-built_in">JSON</span>.stringify(obj3);<span class="hljs-comment">//&quot;{&quot;a&quot;:null,&quot;b&quot;:null,&quot;c&quot;:&quot;2019-03-22T06:44:45.102Z&quot;}&quot;</span>
+<span class="hljs-keyword">var</span> obj4 = <span class="hljs-built_in">JSON</span>.parse(<span class="hljs-string">&apos;{&quot;x&quot;:1}&apos;</span>)<span class="hljs-comment">//obj4.x-&gt;1</span>
+</code></pre>
+</li>
+</ol>
+</li>
+<li><p><code>join</code>&#x548C;<code>reverse</code>&#xFF0C;<code>reverse</code>,<code>concat</code>,<code>slice</code>,<code>splice</code></p>
+<ol>
+<li><pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">repe</span>(<span class="hljs-params">str,n</span>)</span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(n+<span class="hljs-number">1</span>).join(str)<span class="hljs-comment">//&#x6CE8;&#x610F;&#x8FD9;&#x91CC;&#x662F;n+1</span>
+}
+repe(<span class="hljs-string">&apos;a&apos;</span>,<span class="hljs-number">3</span>)<span class="hljs-comment">//&apos;aaa&apos;</span>
+</code></pre>
+</li>
+<li><p>reverse&#x4F1A;&#x5370;&#x8C61;&#x5230;&#x539F;&#x6570;&#x7EC4;</p>
+</li>
+<li><p><code>sort</code>&#x4E0D;&#x6309;&#x6570;&#x5B57;&#x5927;&#x5C0F;&#x6392;&#x5E8F;&#xFF0C;&#x539F;&#x6570;&#x7EC4;&#x88AB;&#x4FEE;&#x6539;&#xFF0C;&#x6309;&#x5B57;&#x6BCD;&#x5927;&#x5C0F;&#x6392;&#x5E8F;&#xFF0C;&#x9700;&#x4ECE;&#x5C0F;&#x5230;&#x5927;&#x6392;&#x5217;&#x65F6;&#xFF1A;<code>arr.sort(function(a,b){return a - b;})</code></p>
+</li>
+<li><p><code>concat</code>&#x548C;<code>slice</code>&#x4E0D;&#x6539;&#x53D8;&#x539F;&#x6570;&#x7EC4;&#xFF0C;<code>splice</code>&#x6539;&#x53D8;&#x539F;&#x6570;&#x7EC4;</p>
+</li>
+<li><p><code>forEach</code>,<code>map</code>,<code>every</code>,<code>some</code>,<code>reduce</code>,<code>reduceRight</code></p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> arr = [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>];
+arr.map((x) =&gt; {
+    <span class="hljs-keyword">return</span> x+<span class="hljs-number">10</span>;<span class="hljs-comment">//[11,12,13]</span>
+});
+arr;<span class="hljs-comment">//[1,2,3]</span>
+<span class="hljs-keyword">var</span> sum = arr.reduce((x,y) =&gt; {
+    <span class="hljs-keyword">return</span> x + y;<span class="hljs-comment">//&#x6700;&#x7EC8;&#x8FD4;&#x56DE;6</span>
+}, <span class="hljs-number">0</span>);<span class="hljs-comment">//&#x4E0D;&#x6539;&#x53D8;&#x539F;&#x6570;&#x7EC4;</span>
+</code></pre>
+</li>
+<li><p><code>indexOf</code>&#x548C;<code>lastIndexOf</code>,&#x8FD4;&#x56DE;&#x7684;&#x5747;&#x4E3A;&#x4ECE;&#x5DE6;&#x5230;&#x53F3;&#x7684;&#x987A;&#x5E8F;&#x5BF9;&#x5E94;&#x7684;&#x4E0B;&#x6807;</p>
+<pre><code class="lang-js">indexOf(<span class="hljs-number">2</span>);<span class="hljs-comment">//&#x67E5;&#x627E;&#x662F;&#x5426;&#x5B58;&#x5728;2</span>
+indexOf(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>);<span class="hljs-comment">//&#x4ECE;&#x7B2C;&#x4E0B;&#x6807;&#x4E3A;2&#x7684;&#x5143;&#x7D20;&#x5F00;&#x59CB;&#x5BFB;&#x627E;1</span>
+indexOf(<span class="hljs-number">1</span>,<span class="hljs-number">-2</span>);<span class="hljs-comment">//&#x4ECE;&#x5012;&#x6570;&#x7B2C;&#x4E8C;&#x4E2A;&#x5143;&#x7D20;&#x5F00;&#x59CB;&#x5BFB;&#x627E;</span>
+lastIndexOf(<span class="hljs-number">2</span>,<span class="hljs-number">-3</span>)
+
+<span class="hljs-keyword">var</span> arr1= [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">2</span>,<span class="hljs-number">1</span>]
+arr1.indexOf(<span class="hljs-number">2</span>);<span class="hljs-comment">//1</span>
+arr1.indexOf(<span class="hljs-number">2</span>,<span class="hljs-number">3</span>);<span class="hljs-comment">//4</span>
+arr1.indexOf(<span class="hljs-number">3</span>,<span class="hljs-number">-1</span>);<span class="hljs-comment">//-1</span>
+arr1.indexOf(<span class="hljs-number">2</span>,<span class="hljs-number">-3</span>);<span class="hljs-comment">//4</span>
+arr1.lastIndexOf(<span class="hljs-number">3</span>);<span class="hljs-comment">//2  lastIndexOf()&#x5012;&#x6570;&#x65F6;&#x4F9D;&#x7136;&#x662F;&#x4ECE;&#x540E;&#x9762;&#x6570;&#x8D77;</span>
+arr1.lastIndexOf(<span class="hljs-number">2</span>,<span class="hljs-number">-3</span>);<span class="hljs-comment">//1</span>
+arr1.lastIndexOf(<span class="hljs-number">4</span>,<span class="hljs-number">-3</span>);<span class="hljs-comment">//3</span>
+arr1.lastIndexOf(<span class="hljs-number">4</span>,<span class="hljs-number">-4</span>);<span class="hljs-comment">//-1</span>
+</code></pre>
+</li>
+<li><p>&#x5224;&#x65AD;&#x662F;&#x5426;&#x4E3A;&#x6570;&#x7EC4;</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> arr1 = [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>];
+<span class="hljs-built_in">Array</span>.isArray([]);<span class="hljs-comment">//true</span>
+arr1 <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span>;<span class="hljs-comment">// true</span>
+({}).toString.apply([]) === <span class="hljs-string">&apos;[object Array]&apos;</span>;<span class="hljs-comment">//true</span>
+arr1.constructor === <span class="hljs-built_in">Array</span>;<span class="hljs-comment">//true</span>
+</code></pre>
+</li>
+<li><p>&#x5B57;&#x7B26;&#x4E32;&#xFF08;&#x7C7B;&#x6570;&#x7EC4;&#xFF09;</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> str = <span class="hljs-string">&apos;hello world&apos;</span>
+str.charAt(<span class="hljs-number">0</span>);<span class="hljs-comment">//&quot;h&quot;</span>
+str[<span class="hljs-number">1</span>];<span class="hljs-comment">//&quot;e&quot;</span>
+<span class="hljs-built_in">Array</span>.prototype.join.call(str,<span class="hljs-string">&apos;_&apos;</span>);<span class="hljs-comment">//&quot;h_e_l_l_o_ _w_o_r_l_d&quot;</span>
+</code></pre>
+</li>
+</ol>
+<p>6.</p>
+</li>
+</ol>
 
                                 
                                 </section>
@@ -519,7 +867,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"ES5","level":"1.2.1","depth":2,"next":{"title":"ES6","level":"1.2.2","depth":2,"path":"Javascript/es6.md","ref":"Javascript/es6.md","articles":[]},"previous":{"title":"Javascript","level":"1.2","depth":1,"path":"Javascript/Javascript.md","ref":"Javascript/Javascript.md","articles":[{"title":"ES5","level":"1.2.1","depth":2,"path":"Javascript/es5.md","ref":"Javascript/es5.md","articles":[]},{"title":"ES6","level":"1.2.2","depth":2,"path":"Javascript/es6.md","ref":"Javascript/es6.md","articles":[]},{"title":"ES7","level":"1.2.3","depth":2,"path":"Javascript/es7.md","ref":"Javascript/es7.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Javascript/es5.md","mtime":"2019-01-24T01:43:41.306Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-02-19T07:24:47.000Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"ES5","level":"1.2.1","depth":2,"next":{"title":"ES6","level":"1.2.2","depth":2,"path":"Javascript/es6.md","ref":"Javascript/es6.md","articles":[]},"previous":{"title":"Javascript","level":"1.2","depth":1,"path":"Javascript/Javascript.md","ref":"Javascript/Javascript.md","articles":[{"title":"ES5","level":"1.2.1","depth":2,"path":"Javascript/es5.md","ref":"Javascript/es5.md","articles":[]},{"title":"ES6","level":"1.2.2","depth":2,"path":"Javascript/es6.md","ref":"Javascript/es6.md","articles":[]},{"title":"ES7","level":"1.2.3","depth":2,"path":"Javascript/es7.md","ref":"Javascript/es7.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"Javascript/es5.md","mtime":"2019-03-22T09:47:19.300Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-03-22T03:22:19.377Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
