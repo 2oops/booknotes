@@ -41,4 +41,6 @@
     * [layout](Interview/layout.md)
     * [Http](Interview/Http.md)
     * [Across-origin](Interview/Across-origin.md)
+    * [Js](Interview/Js.md)
+    * [vue](Interview/vue.md)
 
