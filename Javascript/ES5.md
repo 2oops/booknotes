@@ -180,5 +180,59 @@
       Array.prototype.join.call(str,'_');//"h_e_l_l_o_ _w_o_r_l_d"
       ```
 
-   6.
+6. 函数
+
+   1. Function构造器(很少使用)
+
+      ```
+      var func = new Function('a','b','console.log(a+b)');
+      func(1,2);//3
+      
+      var func2 = Function('a','b','console.log(a+b)');
+      func2(1,3);//4
+      ```
+
+   2. this
+
+      ```js
+      function func() {
+          'use strict';
+          return this;//严格模式下this === undefined,非严格模式下返回window
+      }
+      ```
+
+   3. bind
+
+      ```js
+      this.x = 9;
+      let module = {
+          x: 81,
+          getX: function() {
+              return this.x;
+          }
+      }
+      module.getX();//81
+      let getX = module.getX;
+      getX();//9
+      let bindGetX = getX.bind(module);
+      bindGetX();//81
+      ```
+
+   4. 闭包
+
+      闭包是指一个函数或函数的引用，与一个应用函数绑定在一起，这个应用环境是一个存储该函数每个非局部变量（自由变量）的表。
+
+      闭包不同于一般函数，它允许一个函数在立即词法作用域外调用时，仍可访问非本地变量。
+
+      ```js
+      !function() {//叹号表示函数表达式而不是函数声明
+      var localData = "loacdhere";
+      document.addEventListener('click',
+          function() {
+              console.log(localData);//每次点击屏幕都会打印localData
+          })
+      }()
+      ```
+
+   5. 
 

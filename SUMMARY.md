@@ -43,4 +43,7 @@
     * [Across-origin](Interview/Across-origin.md)
     * [Js](Interview/Js.md)
     * [vue](Interview/vue.md)
+* [NodeJS](NodeJS/nodejs.md)
+* [Http](Http/http.md)
+* [TypeScript](TypeScript/typescript.md)
 
