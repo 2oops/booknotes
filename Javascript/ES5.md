@@ -234,5 +234,138 @@
       }()
       ```
 
-   5. 
+   5. 执行上下文
+
+      ```js
+      if(true) {
+          var a = 1;//a,b均用let声明则报错
+      }else{
+          var b = true;
+      }
+      alert(a);//1
+      alert(b);//undefined 这里else没有执行但是不会报错，因为js没有块级作用域，声明被提前，报undefined
+      ```
+
+7. OOP面向对象编程(Object-oriented Programming) 继承 封装 多态 （抽象）
+
+   1. 基于原型的继承
+
+      ```js
+      function Foo() {
+          this.y = 1;
+      }
+      typeof Foo.prototype; //"object"这里的prototype是函数声明时给到的一个内置属性
+      Foo.prototype.x = 2;
+      var obj3 = new Foo()
+      obj3.x;//2
+      obj3.y;//1
+      
+      //这里来看一下Foo.prototype下有什么
+      {
+          constructor: Foo,//构造器指向本身
+          _proto_: Object.prototype,//_proto_并非标准，Chrome带有，Object.prototype下含有toString
+          //等方法，当前Chrome浏览器返回有更多属性
+          x: 2
+      }
+      ```
+
+      ```
+      Student.prototype = Object.create(Person.prototype);
+      Student.prototype.constructor = Student;
+      ```
+
+      ![1553764098126](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1553764098126.png)
+
+      ![1553764129136](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1553764129136.png)
+
+   2. ```js
+      var obj = {x: 1};
+      obj; // Object {x: 1}
+      obj.x; // 1
+      obj._proto_;// 
+      //输出 Chrome提供
+      //{
+      //    constructor: ƒ Object()
+      //    hasOwnProperty: ƒ hasOwnProperty()
+      //    isPrototypeOf: ƒ isPrototypeOf()
+      //    propertyIsEnumerable: ƒ propertyIsEnumerable()
+      //    toLocaleString: ƒ toLocaleString()
+      //    ......
+      //}
+      Object.getPrototypeOf(obj);// Object {} ES5提供getPrototypeOf()
+      Object.getPrototypeOf(obj) === obj._proto_;//false
+      Object.getPrototypeOf(obj) === Object.prototype;//true
+      
+      function foo() {}
+      foo.prototype;//{constructor: ƒ foo()  __proto__: Object}
+      foo.prototype._proto_;// Object {}
+      foo.prototype._proto_ === Object.prototype;//Chrome 返回false
+      obj.toString();//"[object object]"该方法来源于Object.prototype
+      obj.valueOf();// {x: 1}
+      
+      var obj2 = Object.create(null);并不是所有对象都有Object.prototype
+      obj2.toString(); //not a function
+      obj2._proto_;//undefined
+      
+      //并不是所有的函数都是有prototype
+      function bar() {}
+      bar.prototype; //{constructor: ƒ foo()  __proto__: Object}
+      var binded = bar.bind(null);
+      typeof binded;//"undefined"
+      binded.prototype; //Cannot read property 'prototype' of undefined
+      ```
+
+   3. ```
+      Object.defineProtperty(Object.prototype, 'x', {writable: true, value: 1})
+      ```
+
+      ![1553766867840](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1553766867840.png)
+
+   4. ```js
+      function foo() {}
+      foo.prototype.z = 3;
+      var obj = new foo();
+      obj.y = 2;
+      obj.x = 1;
+      obj.x;
+      obj.x;//1
+      obj.y;//2
+      obj.z;//3
+      typeof obj.toString;//"function"
+      'z' in obj;//true
+      obj.hasOwnProperty('x');//true
+      foo.prototype.hasOwnProperty('z');//true
+      obj.hasOwnProperty('z');//false
+      ```
+
+   5. `instanceof`
+
+      1. `[1,3] instanceof Array === true;`  `instanceof`右边一定要是函数
+      2. `new Object() instanceof Object === true` 判断左边对象的原型链上有没有右边函数的prototype属性
+
+   6. 实现继承的方式
+
+      1. `Student.prototype = new Person();`  但会出现一些问题
+      2. `Student.prototype = Object.create(Person.prototype); Student.prototype.constructor = Person`相对理想的方法
+      3. `Student.prototype = Person.prototye` 考虑不够周全，不推荐
+
+   7. 模拟重载，链式调用，模块化
+
+      1. ![1553768552782](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1553768552782.png)
+
+      2. `Person.call(this, name); Person.prototype.init.apply(this, arguments);`//arguments为数组，注意call和apply的传参区别
+
+      3. ```js
+         //链式调用
+         function classManager() {}
+         classManager.prototype.addClass = function(str) {
+             return this; //通过return this 实现的链式调用
+         }
+         var manager = new classManager();
+         manager.addClass('classA').addClass('classB');
+         ```
+
+      4. 探测器
+
+8. 
 

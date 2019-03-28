@@ -11,6 +11,7 @@
     * [Advanced](CSS3/Advanced.md)
 * [HTML](HTML/HTML.md)
 * [Vue](Vue/Vue.md)
+    * [Vuex](Vue/Vuex.md)
 * [React](React/React.md)
 * [Webpack](Webpack/Webpack.md)
     * [Base](Webpack/Base.md)
