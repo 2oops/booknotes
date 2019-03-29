@@ -74,5 +74,71 @@
 
 4. 深拷贝和浅拷贝
 
-5. 
+5. 手写一个Promise
+
+6. 节流和防抖实现
+
+7. == 和 ===的区别
+
+   1. 可以这么理解，双等号比较时，会先进行数据类型比较，如果不同，则进行类型转换再比较，而三等号不做类型转换，类型不同一定不等。
+
+   2. ```js
+      let a;
+      let b = undefined;
+      let c = null;
+      a == c;
+      b == c;
+      b == a;
+      a === c;//false
+      b === c;//false
+      b === a;//其他均为true
+      typeof(c) === "object";//true,其他两者typeof均为"undefined"
+      ```
+
+   3. ```js
+      function Person(){};
+      var p =new Person();
+      console.log(p instanceof Person);//true
+      var p1 = new Person();
+      var p2 = new Person();
+      
+      p1 == p;//false
+      p1 === p;//虽然typeof(p)和typeof(p1)都为“object",但是new对象只是引用地址改变(栈内存和堆内存)
+      
+      p2 = p;
+      p2 == p;//true
+      p2 === p;
+      ```
+
+   4. 
+
+8. 实现一个`instanceof`
+
+   1. `instanceof`用来判断一个构造函数的`prototype`属性所指向的对象是否存在另一个要检测对象的原型链上
+
+   2. ``` js
+      obj instanceof Object;//true 实例obj是否存在Object构造函数中
+      ```
+
+   3. ```js
+      function _instanceof(left, right) {
+          var prototype = right.prototype;// 取right的显示原型
+          proto = left.__proto__;// 取left的隐式原型
+          while (true) {
+              //Object.prototype.__proto__ === null
+              if (proto === null)
+                  return false;
+              if (prototype === proto)// 这里重点：当 prototype严格等于 proto 时，返回 true
+                  return true;
+              proto = proto.__proto__;
+          }
+      }
+      //检验
+      function Person(){};
+      var p =new Person();
+      p instanceof Person;//true
+      _instanceof(p, Person);//true
+      ```
+
+   4. 
 

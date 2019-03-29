@@ -367,5 +367,64 @@
 
       4. 探测器
 
-8. 
+8. 正则表达式
+
+   1. ```js
+       /\d\d\d/.test("123");//true
+       new RegExp("bbb").test("dfasbbb");//true
+      /(abc)\2/.test('abcabcabc'); //false
+      /(abc)\1/.test('abcabcabc');//true
+      /^x{1,2}$/.test("xx");//true
+      ```
+
+   2. ```
+      \D   非\d
+      \s   空格符，tab，换页符，换行符
+      \w   数字，大小写字母，下划线
+      [...]  字符范围
+      [^...] 字符范围外
+      ^  行首
+      $  行尾
+      \b 零宽单词边界
+      \B 非\b
+      
+      ```
+
+   3. global . ignoreCase, multiline
+
+      ```js
+      new RegExp('abC','mgi').test('abc');//true m-mutiline i-ignoreCase g-global
+      /'abc'/gim.test('aBc');//fasle
+      /abc/gim.test('abC');//true
+      /ABC/g.source;//"ABC"
+      ```
+
+   4. ```js
+      /abc/.exec('abcdef');//["abc", index: 0, input: "abcdef", groups: undefined]
+      /abc/.toString();// "/abc/"
+      
+      var reg = /abc/;//reg需要双/以表示正则表达式
+      reg.compile('defg');
+      reg.test('defg')
+      ```
+
+   5. String类型与正则相关方法
+
+      ```js
+      "abcabcdef".search(/(abcd)\1/);//-1
+      "abcabcdef".search(/(abca)\1/);//-1
+      "abcaabcadef".search(/(abca)\1/);//0
+      
+      "aabbbccc".replace(/b+?/,"1");//"aa1bbccc"
+      "aabbbccc".replace(/b+/,"1");//"aa1ccc"
+      "aabbbccc".replace(/b/,"1");//"aa1bbccc"
+      "aabbbccc".replace(/b*/,"1");//"1aabbbccc"
+      
+      "aabbbcc".match(/b+/);//["bbb", index: 2, input: "aabbbcc", groups: undefined]
+      "aabbbccbbaa".match(/b+/g);//(2) ["bbb", "bb"]
+      "aabbbccbbaa".match(/b+?/g);//(5) ["b", "b", "b", "b", "b"]
+      
+      "aabbbccbbaa".split(/b+/);//(3) ["aa", "cc", "aa"]
+      ```
+
 
