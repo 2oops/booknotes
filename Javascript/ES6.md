@@ -494,4 +494,109 @@ func2({x: 1}, {y:2}); // 1 2
         })
         ```
 
-13. 
+13. class 和extends
+
+    ```js
+    class Animal {
+      constructor(name, age) {//若不添加constructor,Animal本身只有__proto__
+        this.name = name;
+        this.age = age;
+      }
+      toString1() {
+        console.log(`name: ${this.name}, age: ${this.age}`)
+      }
+    }
+    let animal = new Animal('dog','4');
+    animal.toString1();//name dog, age: 4
+    animal.hasOwnProperty('name');//true
+    animal.hasOwnProperty("toString");//false
+    animal.__proto__.hasOwnProperty('toString');//true
+    
+    class Cat extends Animal {
+      constructor(action) {
+        super('cat',6)
+        this.action = action;
+      }
+      toString2() {
+        console.log(super.toString1())
+      }
+    }
+    let cat = new Cat('catch');
+    cat.toString2();//name: cat, age: 6
+    console.log(cat instanceof Cat); // true
+    console.log(cat instanceof Animal); // true
+    ```
+
+14. 函数参数默认值
+
+    ```js
+    function foo(height = 50, color = 'red')
+    {
+        // ...
+    }
+    //避免以下写法
+    function foo(height, color)
+    {
+        var height = height || 50;
+        var color = color || 'red';
+        //...
+    }
+    foo(0,'');//避免参数的布尔值为false
+    ```
+
+15. 解构赋值
+
+    ```js
+    let a = [[23],3,5,"last"]
+    let [first,,,b] = a;
+    first;//[23]
+    b;//"last"
+    let [one, two, three, four] = a;
+    one;//[23]
+    let c, d;
+    [c,d] = [12,34];
+    c;//12
+    let e, f;
+    [e = 3, f = 5] = [4];
+    e;//4
+    
+    const student = {
+      name:'Ming',
+      age:'18',
+      city:'Shanghai'  
+    };
+    const {name,age,city} = student;
+    console.log(name); // "Ming"
+    ```
+
+16. 延展操作符
+
+    ```js
+    function sum(x, y, z) {
+      return x + y + z;
+    }
+    const numbers = [1, 2, 3];
+    
+    //不使用延展操作符
+    console.log(sum.apply(null, numbers));//6
+    //使用延展操作符
+    console.log(sum(...numbers));// 6
+    
+    const stuendts = ['Jine','Tom']; 
+    const persons = ['Tony',... stuendts,'Aaron','Anna'];//
+    ```
+
+17. 对象属性简写
+
+    ```js
+    const name='Ming',age='18',city='Shanghai';
+      
+    const student = {
+        name,
+        age,
+        city
+    };
+    console.log(student);//{name: "Ming", age: "18", city: "Shanghai"}
+    ```
+
+18. 
