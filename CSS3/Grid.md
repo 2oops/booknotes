@@ -78,7 +78,18 @@
     7. `gird-area: row-start1 / 2 / 3 /five;`
        `<row-start> / <column-start> / <row-end> / <column-end>`可以是number和name
 
-    8. self: 沿着行轴对其grid item里的内容
+    8. 使用`grid-template-areas`时，所形成的区域须是矩形
+
+       ```css
+       grid-template-areas:
+         "device customers map province value"
+         "industry customers map province weight"
+         "tops customers map province height"
+         "reminder totaltime statistics runtime trips";
+         //就是说如map,customers,province所形成的区域必须是矩形，否则报错
+       ```
+
+    9. self: 沿着行轴对其grid item里的内容
 
        ```css
        .item {
