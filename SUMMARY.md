@@ -48,4 +48,11 @@
 * [NodeJS](NodeJS/nodejs.md)
 * [Http](Http/http.md)
 * [TypeScript](TypeScript/typescript.md)
+* [ErrorHandle](ErrorHandle/ErrorHandle.md)
+* [Performance](Performance/Performance.md)
+* [DesignPattern](DesignPattern/DesignPattern.md)
+* [Daydayup](Daydayup/daydayup.md)
+    * [Section1](Daydayup/Section1.md)
+    * [Section2](Daydayup/Section2.md)
+* [Regex](Regex/Regex.md)
 

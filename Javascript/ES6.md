@@ -167,7 +167,42 @@ func2(); // 10 10
 func2({x: 1}, {y:2}); // 1 2
 ```
 
-10. Proxy
+10. Proxy对象代理
+
+    ```js
+    let Person = {
+      name: '2oops',
+      age: 22,
+      desc: 'handsome'
+    }
+    let person = new Proxy(Person, {
+      get(target, key) {
+        return target[key];
+      },
+      set(target, key, value) {
+        if(key !== 'age') {
+          target[key] = value;
+        }
+      }
+    })
+    console.table({
+      name: person.name,
+      age: person.age,
+      desc: person.desc
+    })
+    
+    try {
+      person.age = '23';//这里是不可以改的
+    }
+    catch(e){
+      console.log(e)
+    }
+    finally {
+      
+    }
+    ```
+
+
 
       ![img](https://user-gold-cdn.xitu.io/2019/2/12/168df9ec56c9a8f0?imageslim)
 
