@@ -9,7 +9,13 @@ fatal: open /dev/null or dup failed: No such file or directory
 
 这里不整花里胡哨的东西，直接上亲测有效的方法吧，文件夹中找到该文件：`C:\Windows\System32\drivers\null.sys`，替换为以下文件：[win10 专业版 git bash 闪退问题终极解决方案](<http://www.cnblogs.com/ricklz/p/9216395.html>) 最下面有`null.sys`的下载地址，或者直接进入[网盘下载](https://pan.baidu.com/s/1UtcZizm-iFcVk4OKrnFJVg)，密码：`1q4d`。再没有请联系作者，我给你们网盘下载地址。替换完成就OK了。
 
-2. npm安装镜像问题
+2. Git关于权限的问题终极解决方案
+
+   [git -- Authentication failed for 修改密码后遇到的坑](https://blog.csdn.net/qq_40028324/article/details/80883010)
+
+   凭据管理器-->管理Windows凭据-->删除git相关的那个凭据
+
+3. `npm`安装镜像问题
 
 ```
 npm ERR! code Z_BUF_ERROR
