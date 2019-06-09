@@ -1,0 +1,118 @@
+# 深入理解ES6
+
+1. **改变对象的原型**，ES5的`getPrototypeOf()`方法和ES6添加的`setPrototypeOf()`方法
+
+   ```java
+   // 定义两个基对象
+   let person = {
+     getGreeting() {
+       return "hello"
+     }
+   }
+   
+   let dog = {
+     getGreeting() {
+       return "wowo"
+     }
+   }
+   // 以person对象为原型
+   let friend = Object.create(person)
+   console.log(friend.getGreeting())// hello
+   console.log(Object.getPrototypeOf(friend) === person)//true
+   // 将原型设置为dog
+   Object.setPrototypeOf(friend, dog)
+   console.log(friend.getGreeting())//wowo
+   console.log(Object.getPrototypeOf(friend) === dog)// true
+   ```
+
+2. 使用**super**引用简化原型访问
+
+   ```javascript
+   // 先来看一段代码，在ES5中，如果你想重写对象实例的方法，又需要调用与它同名的原型方法
+   let person = {
+       getGreeting() {
+           return "hello"
+       }
+   }
+   let dog = {
+       getGreeting() {
+           return "woow"
+       }
+   }
+   let friend = {
+       getGreeting() {// 这里注意必须要在使用简写方法的对象中使用super引用
+           return Object.getPrototypeOf(this).getGreeting.call(this) + ', hi'
+           //使用super如下
+           // return super.getGreeting() + ', hi'
+       }
+   }
+   // 将原型设置为person
+   Object.setPrototypeOf(friend, person)
+   console.log(friend.getGreeting())// hello, hi
+   console.log(Object.getPrototypeOf(friend) === person)// true
+   // 其实以上friend对象中Object.getPrototypeOf(this)就相当于super
+   
+   // 在多重继承中，super引用非常有用，并且，使用Object.setPrototypeOf()会出现问题，
+   //因为setPrototypeOf()中的this问题最终会导致栈溢出报错
+   // 如下使用super
+   let person = {
+       getGreeting() {
+           return 'hello'
+       }
+   }
+   let friend = {
+       getGreeting() {
+           return super.getGreeting() + ',hi'
+       }
+   }
+   Object.setPrototypeOf(friend, person)
+   
+   let relative = Object.create(friend)
+   console.log(person.getGreeting())// 'hello'
+   console.log(friend.getGreeting())// 'hello,hi'
+   console.log(relative.getGreeting())// 'hello,hi'
+   ```
+
+3. ES6正式定义了方法
+
+   ```javascript
+   let person = {
+       // getGreeting()是方法
+       getGreeting() {
+           return 'hello'
+       }
+   }
+   // 不是方法
+   function share() {
+       return 'hi'
+   }
+   // 这个示例中定义了一个person对象，该对象有一个getGreeting()方法，由于直接把函数赋值给了person对象
+   // 因此getGreeting()方法的[[HomeObject]]属性值为person，而share函数并未明确定义该属性，虽然这是
+   // 个小差别，但是在super引用中这很重要，这就是为什么在2中要求super引用要在对象简写方法中使用。
+   ```
+
+4. ES6扩展对象功能性中还扩展了`assign()`以及`Object.is()`(该方法对所有值进行严格等价判断，比三等号操作符更安全)
+
+   ```javascript
+   Object.is(5, '5')// false
+   Object.is(NaN, NaN)// true
+   NaN === NaN // false
+   +0 === -0 // true
+   Object.is(+0, -0) // false
+   
+   // assign()
+   let receiver = {}
+   Object.assign(receiver,
+       {
+       name: 'xiaoa',
+       type: 'js'
+   },{
+       type: 'string'// 排位靠后的源对象会覆盖靠前的
+   })
+   console.log(receiver.type) // "string"
+   ```
+
+   
+
+
+
