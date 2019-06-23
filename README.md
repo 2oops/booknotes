@@ -26,11 +26,11 @@ Don't be sad for the small stuff
 
 our life is bigger than that
 
-|----Tools
+|----Tools<br/>
+|<nbsp><nbsp><nbsp><nbsp>|----Git
+|<nbsp><nbsp><nbsp><nbsp>|----Vscode
 
-|	|----Git
 
-|	|----Vscode
 |	|----Chrome
 |	|----Typora
 |----Vue
