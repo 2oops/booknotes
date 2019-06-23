@@ -27,7 +27,9 @@ Don't be sad for the small stuff
 our life is bigger than that
 
 |----Tools
+
 |	|----Git
+
 |	|----Vscode
 |	|----Chrome
 |	|----Typora
