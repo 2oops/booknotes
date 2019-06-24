@@ -38,14 +38,14 @@ our life is bigger than that
 |----|----Vuex<br/>
 |----React<br/>
 |----Css<br/>
-|	|----Css3<br/>
-|	|----Less<br/>
-|	|----Sass<br/>
+|----|----Css3<br/>
+|----|----Less<br/>
+|----|----Sass<br/>
 |----Javascript<br/>
-|	|----ES5<br/>
-|	|----ES6<br/>
-|	|----ES7<br/>
-|	|----深入理解ES6<br/>
+|----|----ES5<br/>
+|----|----ES6<br/>
+|----|----ES7<br/>
+|----|----深入理解ES6<br/>
 |----Typescript<br/>
 |----NodeJs<br/>
 |----Database<br/>
