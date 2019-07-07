@@ -46,15 +46,19 @@
       $ git add . 
       ```
    8. ```CRLF->Windows-style
-     CR->Mac Style
-     LF->Unix Style(LF表示表示句尾，只使用换行)
-     CRLF->Windows-style(CRLF表示句尾使用回车换行两个字符(即我们常在Windows编程时使用”\r\n”换行))
-     // 在git中可以通过如下命令转换
-     $git config --global core.autocrlf true
-     core.autocrlf是git中负责处理line endings的变量，可以设置三个值– true , input , false
-     设置为true，添加文件到git仓库时，git将其视为文本文件。他将把crlf变成lf
-     设置为false时，line-endings将不做转换操作
-     设置为inout时，添加文件git仓库时，git把crlf编程lf。当有人Check代码时还是lf方式。因此在window操作系统下，不要使用这个设置
-     ```
+        CR->Mac Style
+          LF->Unix Style(LF表示表示句尾，只使用换行)
+          CRLF->Windows-style(CRLF表示句尾使用回车换行两个字符(即我们常在Windows编程时使用”\r\n”换行))
+          // 在git中可以通过如下命令转换
+          $git config --global core.autocrlf true
+          core.autocrlf是git中负责处理line endings的变量，可以设置三个值– true , input , false
+          设置为true，添加文件到git仓库时，git将其视为文本文件。他将把crlf变成lf
+          设置为false时，line-endings将不做转换操作
+          设置为inout时，添加文件git仓库时，git把crlf编程lf。当有人Check代码时还是lf方式。因此在window操作系统下，不要使用这个设置
+        ```
 
-3. 
+3. git全局配置
+
+   1. `git config --list`命令可以查看git配置信息，包括`user.name和user.email`等等
+   2. 直接`git config user.name`可以查看用户名，同理配置信息中其他项也可按此查看
+   3. `git config --global user.name "xxx"`全局配置用户名

@@ -112,7 +112,7 @@
    console.log(receiver.type) // "string"
    ```
 
-5. ES6中的类
+5. ###### ES6中的类(一等公民)
 
    1. 其实在ES5中已经存在近类结构，思路是这样的：简单来说就是创建一个自定义类型，首先创建一个构造函数，然后定义另一个方法并赋值给构造函数的原型。
 
@@ -134,7 +134,7 @@
    2. 而基本类是这样声明的，与1中的原型继承有相似之处
 
       ```javascript
-      class PersonClass {
+      class PersonClass { // 注意标识符后是没有括号的
           constructor(name) { // 创建构造函数
               this.name = name 
           }
@@ -164,7 +164,192 @@
 
       5）类中不能修改类名，因为类名在类中为常量，而在外部是可以修改的。
 
-   3. 
+   3. 类表达式
+
+      ```javascript
+      let PersonClass = class {
+          constructor(name) {
+              this.name = name // 建议在构造函数中声明所有自有属性
+          }
+          sayName() {
+              console.log(this.name) // this.name即为自有属性
+          }
+      }
+      ```
+
+      类声明和类表达式均不会像函数声明和函数表达式那样被提升。类表达式不需要标识符在类后，除了语法上有差异外，类表达式在功能上等价于类声明。
+
+   4. 命名类表达式
+
+      ```javascript
+      let PersonClass = class PersonClass2 {
+          constructor(name) {
+              this.name = name
+          }
+          sayName() {
+              console.log(this.name)
+          }
+      }
+      typeof PersonClass // "function"
+      typeof PersonClass2 // "undefined"
+      ```
+
+      这里`PersonClass2`只存在于类定义中，而在类的外部并不存在一个名为`PersonClass2`的绑定，所以，为`undefined`，进一步了解原理，如下：
+
+      ```javascript
+      // 不用class关键字等价声明PersonClass
+      let PersonClass = (function() {
+          "use strict" // 前面有说到必须严格模式下使用类
+          const PersonClass2 = function(name) {
+              // 确保通过new关键字调用该函数
+              if(typeof new.target === "undefined") {
+                  throw new Error("必须通过new调用该函数")
+          }
+              this.name = name
+      }
+          Object.defineProPerty( PersonClass2.prototye, "sayName", {
+              value: function() {
+                  if(typeof new.target !== "undefined") {
+                      throw new Error("不能使用new调用该方法")
+                  }
+                  console.log(this.name)
+              },
+              enumerable: false,
+              writable: true,
+              configurable: true
+          });
+          return PersonClass2
+      }())
+      ```
+
+      命名类表达式通过const定义名称，从而`PersonClass2`只能在类的内部使用
+
+   5. 将类作为参数传入函数中
+
+      ```javascript
+      function createObject(classDef) {
+          return new ClassDef()
+      }
+      let obj = createObject( class { // 传入匿名类表达式
+          sayHi() {
+              console.log("HI")
+          }
+      })
+      obj.sayHi() // "HI"
+      ```
+
+   6. 通过立即调用类构造函数创建单例
+
+      ```javascript
+      let person = new Class { // 使用new调用类表达式
+          constructor(name) {
+              this.name = name
+          }
+          sayName() {
+              console.log(this.name)
+          }
+      }("Nical") // 直接使用小括号调用这个表达式
+      person.sayName() // "Nical"
+      ```
+
+   7. 类的访问器属性
+
+      类支持直接在原型上定义访问器属性，创建`getter`时，需要在关键字get后紧跟一个空格和相应的标识符即可，`setter`同理
+
+      ```javascript
+      class CustomHtmlElement{
+          constructor(el) {
+              this.el = el
+          }
+          get html() {
+              return this.el.innerHTML
+          }
+          set html(val) {
+              this.el.innerHTML = val
+          }
+      }
+      let descriptor = Object.getOwnPropertyDescriptor(CustomHtmlElement.prototype, "html")
+      "get" in descriptor // true
+      "set" in descriptro // true
+      descriptor.enumerable // false
+      ```
+
+      该类是对el元素的包装器，并通过getter和setter方法将这个元素的`innerHTML`方法委托给html属性，而这个访问器属性是在原型上创建的。
+
+   8. 可计算成员名称
+
+      ```javascript
+      let methodsName = "sayName"
+      class PersonClass {
+          constructor() {} // 构造器自定义属性
+          [methodsName]() {
+              // 方法
+          }
+      }
+      let me = new PersonClass("Nical")
+      me.sayName() // "Nical"
+      ```
+
+      同理可在访问器属性中应用可计算名称 ` get [propertyName]() {}`
+
+   9. 生成器方法
+
+      在对象字面量中，可通过在方法名前附加一个星号的方式来定义生成器，类中同理，可以将任何方法定义成生成器
+
+      ```javascript
+      class MyClass {
+          *createIterator() {
+              yield 1;
+              yield 2;
+              yield 3;
+          }
+      }
+      let instance = new MyClass()
+      let iterator = instance.createIterator()
+      ```
+
+      通过`Symbol.iterator`定义生成器方法即可为类定义默认迭代器
+
+      ```javascript
+      class Collection {
+          constructor() {
+              this.items = []
+          }
+          *[Symbol.iterator]() {
+              yield *this.items.values()
+          }
+      }
+      let collection = new Collection()
+      collection.items.push(1)
+      collection.items.push(2)
+      collection.items.push(3)
+      for(let x of collection) {
+          console.log(x) // output: 1 2 3
+      }
+      ```
+
+      `collection`即为`Collection`的实例，可以将其直接用于`for-of`或展开运算符中
+
+   10. 静态成员
+
+       ```javascript
+       class PersonClass {
+           constructor(name) {
+               this.name = name
+           }
+           sayName() {
+               console.log(this.name)
+           }
+           static create(name) {
+               return new PersonClass(name)
+           }
+       }
+       let person = PersonClass.create("Nical")
+       ```
+
+       定义的静态方法和`sayName()`方法的区别在于是否使用了static关键字，类中的所有方法和访问器属性都可以用`static`关键字定义，出来构造函数`constructor`
+
+   11. 
 
 
 
