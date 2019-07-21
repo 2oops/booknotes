@@ -349,7 +349,51 @@
 
        定义的静态方法和`sayName()`方法的区别在于是否使用了static关键字，类中的所有方法和访问器属性都可以用`static`关键字定义，出来构造函数`constructor`
 
-   11. 
+6. Promise
+
+   1. 自Promise继承
+
+      ```javascript
+      class MyPromise extends Promise {
+          success(resolve, reject) {
+              return this.then(resolve, reject)
+          }
+          failure(reject) {
+              return this.catch(reject)
+          }
+      }
+      let promise = new MyPromise((resolve, reject) => {
+          reject(22)
+      })
+      promise.success(value => {
+          console.log(value + 1)
+      }).failure(value => {
+          console.log(value) // 22
+      })
+      ```
+
+      `success`和`failure`均为静态方法，派生Promise与内建Promise功能一样，多出来的静态方法也拥有resolve(),reject(),race()和all()这四个方法。
+
+      ```javascript
+      let p1 = new Promise((resolve, reject) => {
+          resolve(23)
+      })
+      let p2 = MyPromise.resolve(p1)
+      p2.success(value => {
+          console.log(value) // 23
+      })
+      console.log(p2 instanceof MyPromise) // true
+      ```
+
+      p1是一个内建promise，被传入MyPromise.resolve()方法后得到p2，它是MyPromise的一个实例，来自p1的resolve值被传入p2完成处理程序。
+
+   2. 基于Promise的异步任务执行（生成器）
+
+7. 代理和反射API
+
+   1. `Proxy`是一种可以拦截并改变底层JavaScript引擎操作的包装器。代理可以拦截JavaScript引擎内部目标的底层对象操作，这些底层操作被拦截后会触发印象特定操作的陷阱函数。
+   2. 反射API以`Reflect`对象形式出现，对象中方法的默认特性与相同的底层操作一致，而代理可以覆写这些操作，每个代理陷阱对应一个命名和参数都相同的`Reflect`方法。
+   3. 
 
 
 
