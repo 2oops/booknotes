@@ -5,7 +5,7 @@
     * [ES5](Javascript/es5.md)
     * [ES6](Javascript/es6.md)
     * [ES7](Javascript/es7.md)
-    * [深入理解ES6](Javascript/深入理解ES6)
+    * [ES6-Advance](Javascript/ES6-Advance.md)
 * [CSS3](CSS3/CSS3.md)
     * [Less](CSS3/less.md)
     * [Scss](CSS3/scss.md)

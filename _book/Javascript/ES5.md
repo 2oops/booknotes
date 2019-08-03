@@ -180,5 +180,251 @@
       Array.prototype.join.call(str,'_');//"h_e_l_l_o_ _w_o_r_l_d"
       ```
 
-   6.
+6. 函数
+
+   1. Function构造器(很少使用)
+
+      ```
+      var func = new Function('a','b','console.log(a+b)');
+      func(1,2);//3
+      
+      var func2 = Function('a','b','console.log(a+b)');
+      func2(1,3);//4
+      ```
+
+   2. this
+
+      ```js
+      function func() {
+          'use strict';
+          return this;//严格模式下this === undefined,非严格模式下返回window
+      }
+      ```
+
+   3. bind
+
+      ```js
+      this.x = 9;
+      let module = {
+          x: 81,
+          getX: function() {
+              return this.x;
+          }
+      }
+      module.getX();//81
+      let getX = module.getX;
+      getX();//9
+      let bindGetX = getX.bind(module);
+      bindGetX();//81
+      ```
+
+   4. 闭包
+
+      闭包是指一个函数或函数的引用，与一个应用函数绑定在一起，这个应用环境是一个存储该函数每个非局部变量（自由变量）的表。
+
+      闭包不同于一般函数，它允许一个函数在立即词法作用域外调用时，仍可访问非本地变量。
+
+      ```js
+      !function() {//叹号表示函数表达式而不是函数声明
+      var localData = "loacdhere";
+      document.addEventListener('click',
+          function() {
+              console.log(localData);//每次点击屏幕都会打印localData
+          })
+      }()
+      ```
+
+   5. 执行上下文
+
+      ```js
+      if(true) {
+          var a = 1;//a,b均用let声明则报错
+      }else{
+          var b = true;
+      }
+      alert(a);//1
+      alert(b);//undefined 这里else没有执行但是不会报错，因为js没有块级作用域，声明被提前，报undefined
+      ```
+
+7. OOP面向对象编程(Object-oriented Programming) 继承 封装 多态 （抽象）
+
+   1. 基于原型的继承
+
+      ```js
+      function Foo() {
+          this.y = 1;
+      }
+      typeof Foo.prototype; //"object"这里的prototype是函数声明时给到的一个内置属性
+      Foo.prototype.x = 2;
+      var obj3 = new Foo()
+      obj3.x;//2
+      obj3.y;//1
+      
+      //这里来看一下Foo.prototype下有什么
+      {
+          constructor: Foo,//构造器指向本身
+          _proto_: Object.prototype,//_proto_并非标准，Chrome带有，Object.prototype下含有toString
+          //等方法，当前Chrome浏览器返回有更多属性
+          x: 2
+      }
+      ```
+
+      ```
+      Student.prototype = Object.create(Person.prototype);
+      Student.prototype.constructor = Student;
+      ```
+
+      ![1553764098126](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1553764098126.png)
+
+      ![1553764129136](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1553764129136.png)
+
+   2. ```js
+      var obj = {x: 1};
+      obj; // Object {x: 1}
+      obj.x; // 1
+      obj._proto_;// 
+      //输出 Chrome提供
+      //{
+      //    constructor: ƒ Object()
+      //    hasOwnProperty: ƒ hasOwnProperty()
+      //    isPrototypeOf: ƒ isPrototypeOf()
+      //    propertyIsEnumerable: ƒ propertyIsEnumerable()
+      //    toLocaleString: ƒ toLocaleString()
+      //    ......
+      //}
+      Object.getPrototypeOf(obj);// Object {} ES5提供getPrototypeOf()
+      Object.getPrototypeOf(obj) === obj._proto_;//false
+      Object.getPrototypeOf(obj) === Object.prototype;//true
+      
+      function foo() {}
+      foo.prototype;//{constructor: ƒ foo()  __proto__: Object}
+      foo.prototype._proto_;// Object {}
+      foo.prototype._proto_ === Object.prototype;//Chrome 返回false
+      obj.toString();//"[object object]"该方法来源于Object.prototype
+      obj.valueOf();// {x: 1}
+      
+      var obj2 = Object.create(null);并不是所有对象都有Object.prototype
+      obj2.toString(); //not a function
+      obj2._proto_;//undefined
+      
+      //并不是所有的函数都是有prototype
+      function bar() {}
+      bar.prototype; //{constructor: ƒ foo()  __proto__: Object}
+      var binded = bar.bind(null);
+      typeof binded;//"undefined"
+      binded.prototype; //Cannot read property 'prototype' of undefined
+      ```
+
+   3. ```
+      Object.defineProtperty(Object.prototype, 'x', {writable: true, value: 1})
+      ```
+
+      ![1553766867840](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1553766867840.png)
+
+   4. ```js
+      function foo() {}
+      foo.prototype.z = 3;
+      var obj = new foo();
+      obj.y = 2;
+      obj.x = 1;
+      obj.x;
+      obj.x;//1
+      obj.y;//2
+      obj.z;//3
+      typeof obj.toString;//"function"
+      'z' in obj;//true
+      obj.hasOwnProperty('x');//true
+      foo.prototype.hasOwnProperty('z');//true
+      obj.hasOwnProperty('z');//false
+      ```
+
+   5. `instanceof`
+
+      1. `[1,3] instanceof Array === true;`  `instanceof`右边一定要是函数
+      2. `new Object() instanceof Object === true` 判断左边对象的原型链上有没有右边函数的prototype属性
+
+   6. 实现继承的方式
+
+      1. `Student.prototype = new Person();`  但会出现一些问题
+      2. `Student.prototype = Object.create(Person.prototype); Student.prototype.constructor = Person`相对理想的方法
+      3. `Student.prototype = Person.prototye` 考虑不够周全，不推荐
+
+   7. 模拟重载，链式调用，模块化
+
+      1. ![1553768552782](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1553768552782.png)
+
+      2. `Person.call(this, name); Person.prototype.init.apply(this, arguments);`//arguments为数组，注意call和apply的传参区别
+
+      3. ```js
+         //链式调用
+         function classManager() {}
+         classManager.prototype.addClass = function(str) {
+             return this; //通过return this 实现的链式调用
+         }
+         var manager = new classManager();
+         manager.addClass('classA').addClass('classB');
+         ```
+
+      4. 探测器
+
+8. 正则表达式
+
+   1. ```js
+       /\d\d\d/.test("123");//true
+       new RegExp("bbb").test("dfasbbb");//true
+      /(abc)\2/.test('abcabcabc'); //false
+      /(abc)\1/.test('abcabcabc');//true
+      /^x{1,2}$/.test("xx");//true
+      ```
+
+   2. ```
+      \D   非\d
+      \s   空格符，tab，换页符，换行符
+      \w   数字，大小写字母，下划线
+      [...]  字符范围
+      [^...] 字符范围外
+      ^  行首
+      $  行尾
+      \b 零宽单词边界
+      \B 非\b
+      
+      ```
+
+   3. global . ignoreCase, multiline
+
+      ```js
+      new RegExp('abC','mgi').test('abc');//true m-mutiline i-ignoreCase g-global
+      /'abc'/gim.test('aBc');//fasle
+      /abc/gim.test('abC');//true
+      /ABC/g.source;//"ABC"
+      ```
+
+   4. ```js
+      /abc/.exec('abcdef');//["abc", index: 0, input: "abcdef", groups: undefined]
+      /abc/.toString();// "/abc/"
+      
+      var reg = /abc/;//reg需要双/以表示正则表达式
+      reg.compile('defg');
+      reg.test('defg')
+      ```
+
+   5. String类型与正则相关方法
+
+      ```js
+      "abcabcdef".search(/(abcd)\1/);//-1
+      "abcabcdef".search(/(abca)\1/);//-1
+      "abcaabcadef".search(/(abca)\1/);//0
+      
+      "aabbbccc".replace(/b+?/,"1");//"aa1bbccc"
+      "aabbbccc".replace(/b+/,"1");//"aa1ccc"
+      "aabbbccc".replace(/b/,"1");//"aa1bbccc"
+      "aabbbccc".replace(/b*/,"1");//"1aabbbccc"
+      
+      "aabbbcc".match(/b+/);//["bbb", index: 2, input: "aabbbcc", groups: undefined]
+      "aabbbccbbaa".match(/b+/g);//(2) ["bbb", "bb"]
+      "aabbbccbbaa".match(/b+?/g);//(5) ["b", "b", "b", "b", "b"]
+      
+      "aabbbccbbaa".split(/b+/);//(3) ["aa", "cc", "aa"]
+      ```
+
 

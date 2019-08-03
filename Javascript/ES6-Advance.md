@@ -1,4 +1,4 @@
-# 深入理解ES6
+# ES6-Advance
 
 1. **改变对象的原型**，ES5的`getPrototypeOf()`方法和ES6添加的`setPrototypeOf()`方法
 
@@ -220,6 +220,7 @@
           });
           return PersonClass2
       }())
+      
       ```
 
       命名类表达式通过const定义名称，从而`PersonClass2`只能在类的内部使用
@@ -236,6 +237,7 @@
           }
       })
       obj.sayHi() // "HI"
+      
       ```
 
    6. 通过立即调用类构造函数创建单例
@@ -250,6 +252,7 @@
           }
       }("Nical") // 直接使用小括号调用这个表达式
       person.sayName() // "Nical"
+      
       ```
 
    7. 类的访问器属性
@@ -272,6 +275,7 @@
       "get" in descriptor // true
       "set" in descriptro // true
       descriptor.enumerable // false
+      
       ```
 
       该类是对el元素的包装器，并通过getter和setter方法将这个元素的`innerHTML`方法委托给html属性，而这个访问器属性是在原型上创建的。
@@ -288,6 +292,7 @@
       }
       let me = new PersonClass("Nical")
       me.sayName() // "Nical"
+      
       ```
 
       同理可在访问器属性中应用可计算名称 ` get [propertyName]() {}`
@@ -306,6 +311,7 @@
       }
       let instance = new MyClass()
       let iterator = instance.createIterator()
+      
       ```
 
       通过`Symbol.iterator`定义生成器方法即可为类定义默认迭代器
@@ -326,6 +332,7 @@
       for(let x of collection) {
           console.log(x) // output: 1 2 3
       }
+      
       ```
 
       `collection`即为`Collection`的实例，可以将其直接用于`for-of`或展开运算符中
@@ -345,6 +352,7 @@
            }
        }
        let person = PersonClass.create("Nical")
+       
        ```
 
        定义的静态方法和`sayName()`方法的区别在于是否使用了static关键字，类中的所有方法和访问器属性都可以用`static`关键字定义，出来构造函数`constructor`
@@ -370,6 +378,7 @@
       }).failure(value => {
           console.log(value) // 22
       })
+      
       ```
 
       `success`和`failure`均为静态方法，派生Promise与内建Promise功能一样，多出来的静态方法也拥有resolve(),reject(),race()和all()这四个方法。
@@ -383,6 +392,7 @@
           console.log(value) // 23
       })
       console.log(p2 instanceof MyPromise) // true
+      
       ```
 
       p1是一个内建promise，被传入MyPromise.resolve()方法后得到p2，它是MyPromise的一个实例，来自p1的resolve值被传入p2完成处理程序。

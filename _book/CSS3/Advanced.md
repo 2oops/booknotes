@@ -87,7 +87,7 @@
    }
    ```
 
-6. ```
+6. ```css
    .overlay {
        position: absolute;
        top: 0;right: 0;bottom: 0;left: 0;
@@ -99,7 +99,9 @@
    <div class="overlay"></div>
    ```
 
-   ------
+
+
+------
 
 7. `relative`
 
@@ -180,69 +182,62 @@
 
 12. line-height
 
-    ```
-            1. 基线之间的距离即行高（实现的居中并非真正的居中）
-          
-            2. input元素中加入`line-height: inherit`增加可控性
-          
-            3. ```css
-                     body {//body全局数值行高实践
-                         font-size: 14px;
-                         line-height: 1.4286；
-                         //font: 14px/1.4286;
-                     }
-                 ```
-          
-            4. 消除图片底部间隙的方法：A  图片块状化`img {display: block;}`   B 图片底线对齐  `img { vertical-align: bottom;}`  C  行高足够小，基线位置上移`.box {line-height: 0;}`
-          
-            5. ###### ######实际应用######
-          
-            6. 图片水平居中`.box {line-height: 300px; text-align: center} .box > img {vertical-align: middle;}`
-          
-            7. ```css
-                     //多行文本水平居中
-                     .box {
-                         line-height: 300px;
-                         text-align: center;
-                     }
-                     .box > text {
-                         display: inline-block;
-                         line-height: normal;
-                         text-align: left;
-                         vertical-align: middle;
-                     }
-                 ```
-    ```
+    1. 基线之间的距离即行高（实现的居中并非真正的居中）
+       
+    2. input元素中加入`line-height: inherit`增加可控性
+       
+    3. ```css
+          body {//body全局数值行高实践
+               font-size: 14px;
+               line-height: 1.4286；
+               /font: 14px/1.4286;
+                }
+          ```
+
+    4. 消除图片底部间隙的方法：A  图片块状化`img {display: block;}`   B 图片底线对齐  `img { vertical-align: bottom;}`  C  行高足够小，基线位置上移`.box {line-height: 0;}`
+       
+    5. ###### ######实际应用######
+       
+    6. 图片水平居中`.box {line-height: 300px; text-align: center} .box > img {vertical-align: middle;}`
+       
+    7. ```css
+         //多行文本水平居中
+         .box {
+             line-height: 300px;
+             text-align: center;
+         }
+         .box > text {
+             display: inline-block;
+             line-height: normal;
+             text-align: left;
+             vertical-align: middle;
+         }
+         ```
 
 13. float
 
-    ```
-           1. 浮动的本身设计是为了实现文字环绕效果
-          
-           2. 伪元素的处理
-          
-               ```css
-               .clearfix:after {
-                   content: '';
-                   display: none;
-                   clear: both;
-               }
-               .clearfix {
-                   *zoom: 1;//兼容IE6,IE7
-               }
-               ```
-          
-           3. float和clear均为left时文本行只显示文字长度
-    ```
+    1. 浮动的本身设计是为了实现文字环绕效果
+
+    2. 伪元素的处理
+
+       ```css
+       .clearfix:after {
+           content: '';
+           display: none;
+           clear: both;
+       }
+       .clearfix {
+           *zoom: 1;//兼容IE6,IE7
+       }
+       ```
+    
+    3. float和clear均为left时文本行只显示文字长度
 
 14. z-index
-
-    ```
     1. z-index在position为非static时才有用
     2. 无嵌套时遵循后来居上原则，有嵌套时遵循祖先优先原则，前提是z-index为数值，而不是auto
     3. ![1552921399583](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1552921399583.png)
     4. 对于非浮层元素，避免设置z-index值，z-index值不超过2
-    ```
 
 15. vertical-align
 
