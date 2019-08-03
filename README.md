@@ -4,14 +4,14 @@ This is a `Front-End` study note, sure it will be more convenient to you and enr
 
 If you like this note, give me your valuable `star`, I will insist on updating this notebook. what's more , if you want to be a contributor of this project, do not hesitate, join us now.
 
-####Download
+#### Download
 
-####How to use
+#### How to use
 
 - User Document
 - Secondary Develop Document
 
-####Contents & Plan
+#### Contents & Plan
 
 |----Tools<br/>
 |----|----Git<br/>
@@ -45,16 +45,16 @@ If you like this note, give me your valuable `star`, I will insist on updating t
 |----|----Cesium<br/>|----Algorithm<br/>
 |----Interview<br/>
 |----Http<br/>
-|----Regex<br/>|----|---Error-handle<br/>
+|----Regex<br/>|----Others<br>|----|---Error-handle<br/>
 |----|----Performance-opt<br/>
 |----|----Design-patterns<br/>
 |----|----Project-summary<br/>
 
-####Communicate & Question
+#### Communicate & Question
 
-(Submit your issues)(https://github.com/2oops/booknotes/issues)
+[Submit your issues](https://github.com/2oops/booknotes/issues)
 
-####About the author
+#### About the author
 
 - Homepage
 - Alipay QR code
