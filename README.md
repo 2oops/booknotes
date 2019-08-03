@@ -6,6 +6,8 @@ If you like this note, give me your valuable `star`, I will insist on updating t
 
 #### Download
 
+https://github.com/2oops/booknotes.git
+
 #### How to use
 
 - User Document
