@@ -1,32 +1,17 @@
 # Introduction
 
-This is just a booklet about front-end, maybe it will be more convenient and easier to remember a lot of front-end knowledge.
+This is a `Front-End` study note, sure it will be more convenient to you and enrich your develop knowledge system.
 
-If you like the booklet, give me your valuable `star`, I will insist on updating this booklet. what's more , if you want to be a contributor of this project, do not hesitate, join us now.
+If you like this note, give me your valuable `star`, I will insist on updating this notebook. what's more , if you want to be a contributor of this project, do not hesitate, join us now.
 
-You have 86400 RMB in your account
+####Download
 
-One day somebody steals 10 RMB
+####How to use
 
-Will you be upset
+- User Document
+- Secondary Develop Document
 
-and throw all of the 86390 RMB away
-
-or will you just move on
-
-Right, normally people will move on
-
-Actually we also have 86400 seconds every single day
-
-So don't let someone's negative 10 seconds
-
-ruin the rest 86390s
-
-Don't be sad for the small stuff
-
-our life is bigger than that
-
-###### CONTENTS
+####Contents & Plan
 
 |----Tools<br/>
 |----|----Git<br/>
@@ -45,7 +30,7 @@ our life is bigger than that
 |----|----ES5<br/>
 |----|----ES6<br/>
 |----|----ES7<br/>
-|----|----深入理解ES6<br/>
+|----|----ES6-Advance<br/>
 |----Typescript<br/>
 |----NodeJs<br/>
 |----Database<br/>
@@ -55,25 +40,21 @@ our life is bigger than that
 |----Webpack<br/>
 |----|----Base<br/>
 |----|----Advance<br/>
-|----WebGL<br/>
-|----算法<br/>
+|----WebGL<br/>|----|----Threejs<br/>
+|----|----Echarts<br/>
+|----|----Cesium<br/>|----Algorithm<br/>
 |----Interview<br/>
 |----Http<br/>
-|----Regex<br/>
-|----Others<br/>
-|----|----ThreeJs<br/>
-|----|----Echarts<br/>
-|----|----Cesium<br/>
-|----|----错误处理<br/>
-|----|----性能优化<br/>
-|----|----设计模式<br/>
-|----|----项目总结<br/>
+|----Regex<br/>|----|---Error-handle<br/>
+|----|----Performance-opt<br/>
+|----|----Design-patterns<br/>
+|----|----Project-summary<br/>
 
+####Communicate & Question
 
+(Submit your issues)(https://github.com/2oops/booknotes/issues)
 
+####About the author
 
-
-
-
-
-
+- Homepage
+- Alipay QR code
