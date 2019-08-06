@@ -163,3 +163,78 @@ $git cherry-pick 4c97ff3
 ```
 
 [相关操作详情](https://github.com/airuikun/blog/issues/5)
+
+10. 如果一个实习生，他本地git的A分支被误删了， A分支代码没有被push到远程，如何找到之前A的提交记录和代码
+
+    1. 模拟这个场景，现在我们处于xxx分支
+
+       ```
+       git checkout master //切到master分支
+       
+       git branch -d xxx //删除xxx分支，这里仅仅是删除了本地分支
+       
+       git push origin --delete xxx //这是删除远程分支，但是这次模拟不执行这一步
+       ```
+
+
+
+    2. 实际操作中如果本地作了修改，但是没有add并commit的话是不会让你切换分支的
+
+       ```
+       error: Your local changes to the following files would be overwritten by checkout:
+       
+               README.md
+       
+       Please commit your changes or stash them before you switch branches.
+       
+       Aborting
+       ```
+
+
+    3. 我们先commit，commit之后我们会得到下列提示
+
+       ```
+       $ git commit -m '测试删除本地分支'
+       [xxx 477939e] 测试删除本地分支
+        2 files changed, 9 insertions(+), 1 deletion(-)
+       ```
+
+    4. 如果我们没注意到这个提交的信息，可以使用以下命令查看，里面有Date可提交人，以及提交信息
+
+       ```
+       git log -a
+       ```
+
+    5. 现在我们删除本地xxx分支，这里如果使用命令行删除的话是会提示的，除非你使用`git branch -D xxx'
+
+       ```
+       error: The branch 'xxx' is not fully merged.
+       If you are sure you want to delete it, run 'git branch -D xxx'.
+       ```
+
+    6. 现在我们强制删除
+
+       ```
+       Deleted branch xxx (was 9a317f5).
+       ```
+
+    10. 强制删除后执行`git log -g`，我们可以得到这个
+
+        ```
+        commit e4f843a1cb43d375c5d5c3e567f1cf931855261a (HEAD -> master, origin/master)
+        ```
+
+    11. 下一步我们拿到这个`e4f843a1cb43d375c5d5c3e567f1cf931855261a`，删除分支的那条记录标志，然后执行
+
+        ```
+        git branch recover-xxx e4f843a1cb43d375c5d5c3e567f1cf931855261a
+        //然后我们查看下本地分支情况
+        git branch -a
+        //可以得到如下
+        * master
+          recover-xxx
+          remotes/origin/master
+          remotes/origin/xxx
+        ```
+
+    12. 
