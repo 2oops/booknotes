@@ -339,3 +339,87 @@
 
    1. 参考[实现三栏布局的6种方式](https://www.jianshu.com/p/3046eb050664)
    2. [div块元素垂直水平居中](https://www.cnblogs.com/Youngly/p/6796922.html)
+
+#### 前端
+
+1. 原始类型：`boolean, null, undefined, number, symbol, string`原始类型存储的都是值（对比对象类型存储的是指针地址），没有函数可以调用。
+
+   - string类型是不可变的，无论调用何种方法，值都不会改变；
+
+   - null是个对象类型其实是个bug，JS最初版本使用的是32位系统，为了性能考虑使用的是低位存储变量的类型信息，`000`开头代表是对象，而`null`表示的是全零，故此误判为`object`。
+
+2. 对象类型：
+
+   ```javascript
+   const a = []
+   const b = a
+   b.push(1) // a = [1], b = [1]
+   // 当变量赋值时，复制的是原本变量的地址，也就是说两个变量的存放的地址（指针）是一样的，所以两个值都会
+   //发生改变
+   ```
+
+   ```javascript
+   // 函数参数为对象
+   // 记住函数传参为对象时传的是对象指针的副本，进入函数内部后会修改属性所以p1的值也会被修改
+   function test(person) {
+     person.age = 26
+     person = {
+       name: 'yyy',
+       age: 30
+     }
+     // person.name = "xiaohei" 若添加此行，p1不变，p2{name:"xiaohei",age:30}
+     return person
+   }
+   const p1 = {
+     name: 'yck',
+     age: 25
+   }
+   const p2 = test(p1)
+   // p1{name:"yck", age:26}
+   // p2{name:"yyy", age:30}
+   ```
+
+3. `typeof & instanceof`
+
+   `typeof`对于原始类型来说，除了`null`都可以显示正确的类型
+
+   `typeof`对于对象类型，除了函数都会显示为`object`，所以并不准确
+
+   ```javascript
+   //注意symbol
+   typeof Symbol() // "symbol"
+   typeof null // "object"
+   
+   typeof console.log // "function"
+   typeof console // "object"
+   ```
+
+   如果想要正确判断一个对象的正确类型，这里就要使用`intanceof`，因为其内部机制是通过原型链来判断的。如果想要使用`instanceof`来判断原始类型也是可以的，可以使用`Symbol.hasInstance`来自定义`instanceof`的行为。
+
+   ```javascript
+   class PrimitiveString() {
+       static [Symbol.hasInstance](x) { // 静态属性
+           return typeof x === "string"
+       }
+   }
+   console.log("aaa" instanceof PrimitiveString) // true // 这里说明，instanceof也不是一定就是对的
+   ```
+
+
+
+   | 原始值           | 转换目标 |                      结果                      |
+   | ---------------- | -------- | :--------------------------------------------: |
+   | number           | boolean  |             除了0，-0，NaN都为true             |
+   | string           | boolean  |                除了空串都是true                |
+   | undefined/null   | boolean  |                     false                      |
+   | 引用类型         | boolean  |                      true                      |
+   | number           | string   |                   10 -> '10'                   |
+   | Array            | string   |               [1,2,4] -> '1,2,4'               |
+   | object           | string   |                     string                     |
+   | string           | number   |              "1" -> 1, 'a' -> NaN              |
+   | Array            | number   | 空数组为0，存在一个元素且为数字转数字，其他NaN |
+   | null             | number   |                       0                        |
+   | 除数组的引用类型 | number   |                      NaN                       |
+   | Symbol           | number   |                      报错                      |
+
+   在条件判断时，除了`undefined, null, '', 0, false, NaN, -0`其他所有值都转为`true`，注意这里空数组也是转为`true`
