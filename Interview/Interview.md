@@ -405,21 +405,93 @@
    console.log("aaa" instanceof PrimitiveString) // true // 这里说明，instanceof也不是一定就是对的
    ```
 
+4. 类型转换
 
+  | 原始值           | 转换目标 |                      结果                      |
+  | ---------------- | -------- | :--------------------------------------------: |
+  | number           | boolean  |             除了0，-0，NaN都为true             |
+  | string           | boolean  |                除了空串都是true                |
+  | undefined/null   | boolean  |                     false                      |
+  | 引用类型         | boolean  |                      true                      |
+  | number           | string   |                   10 -> '10'                   |
+  | Array            | string   |               [1,2,4] -> '1,2,4'               |
+  | object           | string   |                     string                     |
+  | string           | number   |              "1" -> 1, 'a' -> NaN              |
+  | Array            | number   | 空数组为0，存在一个元素且为数字转数字，其他NaN |
+  | null             | number   |                       0                        |
+  | 除数组的引用类型 | number   |                      NaN                       |
+  | Symbol           | number   |                      报错                      |
 
-   | 原始值           | 转换目标 |                      结果                      |
-   | ---------------- | -------- | :--------------------------------------------: |
-   | number           | boolean  |             除了0，-0，NaN都为true             |
-   | string           | boolean  |                除了空串都是true                |
-   | undefined/null   | boolean  |                     false                      |
-   | 引用类型         | boolean  |                      true                      |
-   | number           | string   |                   10 -> '10'                   |
-   | Array            | string   |               [1,2,4] -> '1,2,4'               |
-   | object           | string   |                     string                     |
-   | string           | number   |              "1" -> 1, 'a' -> NaN              |
-   | Array            | number   | 空数组为0，存在一个元素且为数字转数字，其他NaN |
-   | null             | number   |                       0                        |
-   | 除数组的引用类型 | number   |                      NaN                       |
-   | Symbol           | number   |                      报错                      |
+  在条件判断时，除了`undefined, null, '', 0, false, NaN, -0`其他所有值都转为`true`，注意这里空数组也是转为`true`
 
-   在条件判断时，除了`undefined, null, '', 0, false, NaN, -0`其他所有值都转为`true`，注意这里空数组也是转为`true`
+  **对象转换为原始类型**：`toString() , valueOf`, 对象在转换类型的时候，会调用内置的`[[toprimitive]]`函数，该函数优先级最高，也可以重写
+
+  ```javascript
+  let a = {
+      valueOf() {
+          return 0
+      }
+      toString() {
+          return 1
+      }
+  	[Symbol.toPrimitive]() {
+      	return 2
+  	}
+  }
+  1 + a; // 3
+  ```
+
+  **四则运算符**：
+
+  运算中一方是字符串，结果会被转为字符串；
+
+  一方中不是字符串或数字，结果会被转换为字符串或数字；
+
+  对于除加法之外的运算来说，只要其中一方是数字，则会转换为数字
+
+  ```javascript
+  true + true // 2
+  true + false // 1
+  1 + [2,3,5] // "12,3,5"
+  'a'+ +'b' // -> "aNaN" 注意空格
+  2 * [1,2] // NaN
+  2 * [] // 0 //上面表格有讲空数组转数字时为0
+  ```
+
+  **比较运算符**：对象--`toPrimitive`;字符串--通过`unicode`字符索引比较
+
+  **this**
+
+  ![img](https://user-gold-cdn.xitu.io/2018/11/15/16717eaf3383aae8?imageslim)
+
+  箭头函数其实是没有`this`的，它只取决于包裹箭头函数的第一个普通函数的`this`，另外对箭头函数使用`bind`这类函数是无效的。
+
+  ```javascript
+  let a = {age: 20}
+  function foo() {
+      console.log(this.age)
+  }
+  foo.bind(a)() // 20
+  ```
+
+  在上图的`this`规则中，`new`的方式优先级最高，然后`bind()`，然后是`obj.foo()`最后是`foo`，而且，箭头函数的`this`一旦绑定，是不会再改变的。
+
+  ```javascript
+  function foo() {
+      console.log(this.age)
+  }
+  var age = 10
+  foo() // 10
+  
+  const obj = {
+      age: 20,
+      foo: foo
+  }
+  obj.foo() // 20
+  
+  let c = new foo()
+  let d = {age: 30}
+  foo.bind(d)() // 30
+  ```
+
+  
