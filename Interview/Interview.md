@@ -407,20 +407,20 @@
 
 4. 类型转换
 
-  | 原始值           | 转换目标 |                      结果                      |
-  | ---------------- | -------- | :--------------------------------------------: |
-  | number           | boolean  |             除了0，-0，NaN都为true             |
-  | string           | boolean  |                除了空串都是true                |
-  | undefined/null   | boolean  |                     false                      |
-  | 引用类型         | boolean  |                      true                      |
-  | number           | string   |                   10 -> '10'                   |
-  | Array            | string   |               [1,2,4] -> '1,2,4'               |
-  | object           | string   |                     string                     |
-  | string           | number   |              "1" -> 1, 'a' -> NaN              |
-  | Array            | number   | 空数组为0，存在一个元素且为数字转数字，其他NaN |
-  | null             | number   |                       0                        |
-  | 除数组的引用类型 | number   |                      NaN                       |
-  | Symbol           | number   |                      报错                      |
+| 原始值           | 转换目标 |                      结果                      |
+| ---------------- | -------- | :--------------------------------------------: |
+| number           | boolean  |             除了0，-0，NaN都为true             |
+| string           | boolean  |                除了空串都是true                |
+| undefined/null   | boolean  |                     false                      |
+| 引用类型         | boolean  |                      true                      |
+| number           | string   |                   10 -> '10'                   |
+| Array            | string   |               [1,2,4] -> '1,2,4'               |
+| object           | string   |                     string                     |
+| string           | number   |              "1" -> 1, 'a' -> NaN              |
+| Array            | number   | 空数组为0，存在一个元素且为数字转数字，其他NaN |
+| null             | number   |                       0                        |
+| 除数组的引用类型 | number   |                      NaN                       |
+| Symbol           | number   |                      报错                      |
 
   在条件判断时，除了`undefined, null, '', 0, false, NaN, -0`其他所有值都转为`true`，注意这里空数组也是转为`true`
 
@@ -494,4 +494,15 @@
   foo.bind(d)() // 30
   ```
 
-  
+####   `== vs ===`
+
+双等号是针对于如果对比双方的类型不一样，就会进行类型转换。`===`即判断两者类型和值是否相同。
+
+![img](https://user-gold-cdn.xitu.io/2018/12/19/167c4a2627fe55f1?imageslim)
+
+#### 闭包
+
+#### 深浅拷贝
+
+
+
