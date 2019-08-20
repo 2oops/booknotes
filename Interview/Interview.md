@@ -504,5 +504,22 @@
 
 #### 深浅拷贝
 
+#### 原型
+
+#### var、let及const
+
+#### 原型继承和Class继承
+
+1. `Class`只是语法糖，本质还是函数
+
+   ```javascript
+   class Person {}
+   Person instanceof Function // true
+   ```
+
+2. 组合继承
+3. 寄生组合继承
+4. `Class`继承
+
 
 
