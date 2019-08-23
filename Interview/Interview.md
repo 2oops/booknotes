@@ -10,7 +10,7 @@
 
 以下三个标签是允许跨域加载资源：
 
-```
+```javascript
 <img src=XXX>
 <link href=XXX>
 <script src=XXX>
@@ -518,8 +518,99 @@
    ```
 
 2. 组合继承
+
 3. 寄生组合继承
+
 4. `Class`继承
 
+#### 模块化
 
+1. 好处：解决命名冲突；提供复用性；提高代码可维护行
+2. `CommonJS`
+3. `ES Module`
+4. `Proxy`
+
+#### map、filter、reduce
+
+5. **并发与并行的区别？**
+
+   并发是宏观概念，假设我有A和B两个任务需要执行，在一段时间内通过任务间的切换完成了这两个任务，这种情况就可称之为并发；
+
+   并行是微观概念，假设CPU中有两个核心，我想同时跑任务A和B，同时完成多个任务的情况就可称之为并行。
+
+6. `Generator`
+
+   ```javascript
+   function * bar(x) {
+         let y = yield(x + 1);
+         let z = yield(y/3);
+         return (x + y + z)
+       }
+       let it = bar(5)
+       //
+   undefined
+   it.next()
+   {value: 6, done: false}
+   it.next(9)
+   {value: 3, done: false}
+   it.next(2)
+   {value: 16, done: true}
+   it.next(2)
+   {value: undefined, done: true}
+   ```
+
+7. `Promise`
+
+   ```javascript
+   let promise1 = new Promise((resolve, reject) => {
+         console.log("new Promise")
+         resolve("success")
+       })
+   
+       let promise2 = new Promise((resolve, reject) => {
+         console.log("error")
+         reject("error")
+       })
+   
+       Promise.all([promise1, promise2]).then(res => {
+         console.log("ok")
+       })
+   //
+   VM1052:2 new Promise
+   VM1052:7 error
+   ```
+
+8. `async`及`await`
+
+9. 定时器函数
+
+   `setInterval, setTimeout, requestAnimationFrame`，如果有循环定时器的需求，可以通过	`requestAnimationFrame`实现，其自带函数节流功能，基本可以保证在16.6ms内只执行一次（不掉帧的情况下）。相比其他定时器时间不准的问题，该函数的延时效果是精确的。
+
+   ```javascript
+   function setInterval(callback, interval) {
+         let timer
+         const now = Date.now
+         let startTime = now()
+         let endTime = startTime
+         const loop = () => {
+           timer = window.requestAnimationFrame(loop)
+           endTime = now()
+           if (endTime - startTime >= interval) {
+             startTime = endTime = now()
+             callback(timer)
+           }
+         }
+         timer = window.requestAnimationFrame(loop)
+         return timer
+       }
+   
+       let a = 0
+       setInterval(timer => {
+         console.log(1)
+         a++
+         while(a === 5) cancelAnimationFrame(timer)
+       }, 1000)
+   ```
+
+10. 
 

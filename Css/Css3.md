@@ -913,3 +913,118 @@
     7. 实际应用：vertical-align取负值
     8. 图片居中：inline-block化，0宽度100%高度辅助元素，vertical-align: middle
     9. ![1553011503097](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1553011503097.png)
+
+
+
+#### Advance
+
+1. 天狗食月效果
+
+   ```html
+   <!DOCTYPE html>
+   <html>
+     <head>
+       <style type="text/css">
+         body {
+           display: flex;
+           height: 100vh;
+           background: #aaaaaa;
+         }
+         .circle {
+           margin: auto;
+           width: 50px; 
+           height: 50px;
+           border-radius: 50%;
+           color: rgb(245, 178, 178);
+           box-shadow: inset 5em 0 0;
+           animation: move 10s linear infinite alternate-reverse;
+         }
+         @keyframes move {
+           to {
+             box-shadow: inset -5em 0 0;
+           }
+         }
+       </style>
+     </head>
+   
+     <body>
+       <div class="circle">
+       </div>
+     </body>
+   </html>
+   ```
+
+2. 美化表格
+
+   ```html
+   <!DOCTYPE html>
+   <html>
+     <head>
+       <style type="text/css">
+         table, tr, th, td {
+           border: 1px solid #d6d6d6;
+         }
+         table {
+           width: 100%;
+           border-collapse: collapse;
+           font-size: 14px;
+           color: #555;
+           table-layout: fixed;
+         }
+         th, td {
+           padding: 6px 12px;
+         }
+         tr:nth-child(odd) {
+           background: aliceblue;
+         }
+         tr:hover {
+           background: lightpink;
+         }
+         tr {
+           transition: background 1s;
+         }
+       </style>
+     </head>
+   
+     <body>
+       <colgroup>
+         <col span="3"></col>
+         <col style="width: 260px"></col>
+       </colgroup>
+       <table>
+         <tr>
+           <th>等级</th>
+           <th>掘力值</th>
+           <th>身份</th>
+           <th>权限</th>
+         </tr>
+         <tr>
+           <td>lv3</td>
+           <td>200</td>
+           <td></td>
+           <td>开发中</td>
+         </tr>
+         <tr>
+           <td>lv4</td>
+           <td>500</td>
+           <td>优秀作者</td>
+           <td>小册写作权限</td>
+         </tr>
+         <tr>
+           <td>lv6</td>
+           <td>1000</td>
+           <td>合伙人</td>
+           <td>提交代码</td>
+         </tr>
+         <tr>
+           <td>lv10</td>
+           <td>2000</td>
+           <td>ceo</td>
+           <td>证书</td>
+         </tr>
+       </table>
+     </body>
+   </html>
+   ```
+
+3. 
