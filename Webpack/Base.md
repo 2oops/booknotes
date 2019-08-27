@@ -87,4 +87,50 @@
       };
       ```
 
-2. 
+2. webpack配置是标准的`Node.js CommonJs`模块，允许任何技术栈使用webpack。
+
+3. 模块解析：模块会在`resolve.modules`中指定的所有目录内搜索，可使用`resolve.alias`配置选项创建一个别名。
+
+   解析后，解析器将检查路径是否指向文件或目录，如果指向一个文件：
+
+   - 如果有扩展名，则将文件直接打包
+   - 否则，将使用`[resolve.extensions]`选项作为文件扩展名去解析。
+
+   如果指向一个文件夹
+
+   - 文件夹中包含`package.json`，则顺序查找`resolve.mainFileds`配置选项中的指定字段，并且 `package.json` 中的第一个这样的字段确定文件路径。
+   - `package.json`文件不存在或者该文件的`main`字段没有返回一个有效路径，则顺序查找`resolve.mainFiles`配置选项中的文件名，看是否能在`import/require`目录下匹配到一个存在的文件名。
+   - `resolve.extensions`
+
+4. `manifest和runtime`的处理跟缓存有关
+
+   `runtime`包含在模块交互时，连接模块所需的加载和解析逻辑，以及浏览器中已加载模块的连接和懒加载模块的执行逻辑。
+
+   `manifest`是一个数据集合，保留了编译器开始执行、解析和映射应用程序时所有模块的详细要点。
+
+5. 构建目标`target: 'node'`
+
+   ```javascript
+   const path = require('path')
+   const serverConfig = {
+       target: 'node',
+       output: {
+           path: path.resolve(__dirname, 'dist'),
+           filename: 'lib.node.js'
+       }
+   }
+   const clientConfig = {
+       target: 'web'// 默认，可省略
+       output: {
+            path: path.resolve(__dirname, 'dist'),
+            filename: 'lib.js'
+       }
+   }
+   module.exports = [serverConfig, clientConfig]
+   ```
+6. 模块热替换是指在应用程序执行过程中替换、添加或删除模块而无需重新加载整个页面。`devServer: {hot: true}`
+
+   程序代码 =>HMR runtime检查更新 => HMR runtime异步更新 => 通知应用程序代码 => 要求HMR runtime应用更新 => HMR runtime同步更新
+
+   
+
