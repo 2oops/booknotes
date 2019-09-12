@@ -612,5 +612,185 @@
        }, 1000)
    ```
 
-10. 
+10. Promise
+
+    1. 简易Promise
+
+       ```javascript
+       //1.function myPromise(fn)
+       //2. function resolve()
+       //3. function reject()
+       //4. try{fn(resolve, reject)} catch(e){reject(e)}
+       //myPromise.prototype.then
+       ```
+
+11. Event Loop
+
+    1. Js单线程的好处
+       - 如果是多线程，那么就有可能出现多个线程操作同一个DOM，
+       - 单线程的执行效率比较高，省去了比较耗时的线程切换以保证程序执行上下文。
+
+12. `instanceof`的原理
+
+    1. 原理是其内部机制是通过判断对象的原型链中是否能够找到类型的`prototype`，以此来正确判断对象的类型。
+
+    2. 实现`instanceof`只针对对象有效
+
+       ```javascript
+       function myInstanceof(left, right) {
+       	left = left.__proto__ // 获取对象原型
+           let prototype = right.prototype// 获取类型原型
+           while(true) { // 一直判断对象的原型是否等于类型的原型，知道对象原型为null，因原型链最终为null
+               if(left === null || left === undefined)
+                   return false
+               if(left === prototype)
+                   return true
+               left = left.__proto__
+           }
+       }
+       ```
+
+13. `0.1 + 0.2 != 0.3`的问题
+
+    1. 原因：JS采用IEEE754双精度版本（64位），其中使用二进制存储，二进制表示小数位很多是无限循环的，JS采用的浮点数标准会裁剪掉部分数字，导致小数不准确。
+
+    2. 解决方法：`parseFloat((0.1 + 0.2).toFixed(10)) === 0.3 //true`或`parseFloat((0.1 + 0.2).toFixed(10)) === 0.3`
+
+14. V8引擎下的垃圾回收机制
+
+    GC算法
+
+    标记清除算法和标记压缩算法
+
+    并发标记（2018）：GC扫描和标记对象的同时，允许JS运行
+
+    清除对象后会造成堆内存出现碎片的情况，当碎片超过一定限制后会启动清除压缩算法。压缩过程中，将活的对象向一端移动，直到所有对象都移动完成然后清理掉不需要的内存。
+
+15. `call, apply, bind`函数
+
+    - 不传入第一个参数，那么上下文默认为`window`
+    - 改变了`this`的指向，让新的对象可以执行该函数，并且能接受函数
+
+    ```javascript
+    //实现call
+    Function.prototype.myCall = function(context) {
+      if(typeof this !== 'function') {
+        throw new TypeError('Error')
+      }
+      context = context || window
+      context.fn = this //给context创建一个fn属性，值设置为需要调用的函数
+      const args = [...arguments].slice(1) // 剥离第一个参数
+      //调用函数并将对象上的函数删除
+      const result = context.fn(...args)
+      delete context.fn
+    
+      return result
+    }
+    
+    //实现apply
+    Function.prototype.myApply = function(context) {
+      if(typeof this !== 'function') {
+        throw new TypeError('Error')
+      }
+      context = context || window
+      context.fn = this
+      let result
+      // 和call的区别
+      if(arguments[1]) {
+        result = context.fn(...arguments[1])
+      }else {
+        result = context.fn()
+      }
+      delete context.fn
+    
+      return result
+    }
+    
+    // bind与前两者的区别是返回的是一个函数
+    ```
+
+    
+
+16. `new`操作符
+
+    1. `new`的原理：生成一个新的对象，链接到原型，绑定了`this`，返回新对象
+
+       ```javascript
+       function create() {
+       // 创建一个空对象
+       let obj = {}
+       // 获取构造函数
+       let Con = [].shift.call(arguments)
+       // 链接到原型（instanceof的实现？对象原型和类型原型）
+       obj.__proto__ = Con.prototype
+       // 绑定到this并执行构造函数
+       let result = Con.apply(obj, arguments)
+       // 确保返回值为函数
+       return result instanceof Object ? result : obj
+       }
+       ```
+
+       
+
+    2. new一个对象和直接使用对象字面量创建对象有什么区别？
+
+       字面量创建的对象可读性和性能都比较好，new的对象需要通过作用域链找到`Object`
+
+17. DevTools Tips
+
+    1. 元素快速定位：需要快速定位到某个滚动页面里的元素时，可以F12找到该元素代码，然后右键选择`Scroll into view`
+    2. 给DOM打断点可以查看该DOM是如何通过JS更改的：元素=>右键=>`Break on`=>`subtree modifications`
+    3. 找到之前查看过的DOM元素：console页面菜单下使用`$0,$1`等等，右键该元素可定位到该元素，也可以更改
+    4. 浏览器中打断点时使用`Edit breakpoint...`在弹框中输入条件，使得只有满足该条件时断点才会生效
+
+18. 事件机制
+
+    1. window=>冒泡=>捕获
+
+    2. 使用`addEventListener` 注册事件：
+
+       ```javascript
+       // 注册事件的传参
+       node.addEventListener(
+         'click',
+         event => {
+           console.log('冒泡')
+         },
+         false
+       )
+       ```
+
+       有三个参数，第三个参数可以是`boolean`值，也可以是对象。布尔值`useCapture`决定了注册的事件是捕获事件还是冒泡事件。对象参数如下：
+
+       `capture`: 和`useCapture`一样；
+
+       `once`: 为`true`表示只会该回调只会调用一次，调用完就不在监听
+
+       `passive`: 表示永远不会调用`preventDefault`
+
+    3. `stopPropagation`可阻止事件冒泡，当然也可以阻止事件捕获
+
+    4. `stopImmediatePropagation`同样能阻止事件，还能阻止该事件目标执行别的注册事件
+
+       ```javascript
+       node.addEventListener(
+         'click',
+         event => {
+           event.stopImmediatePropagation()
+           console.log('冒泡')
+         },
+       false)
+       // 以下将不会执行
+       node.addEventListener(
+         'click',
+         event => {
+           console.log('捕获')
+         },
+         false
+       )
+       ```
+
+    19. 事件代理
+
+
 
