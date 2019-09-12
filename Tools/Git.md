@@ -154,13 +154,12 @@
 
 9. git回滚操作
 
-```git
-$git relog
-$git log
-$git reset --hard cd52afc
-$git cherry-pick 4c97ff3
-
-```
+   ```javascript
+   $git relog
+   $git log
+   $git reset --hard cd52afc
+   $git cherry-pick 4c97ff3
+   ```
 
 [相关操作详情](https://github.com/airuikun/blog/issues/5)
 
@@ -176,8 +175,6 @@ $git cherry-pick 4c97ff3
        git push origin --delete xxx //这是删除远程分支，但是这次模拟不执行这一步
        ```
 
-
-
     2. 实际操作中如果本地作了修改，但是没有add并commit的话是不会让你切换分支的
 
        ```
@@ -189,8 +186,6 @@ $git cherry-pick 4c97ff3
        
        Aborting
        ```
-
-
     3. 我们先commit，commit之后我们会得到下列提示
 
        ```
@@ -198,7 +193,6 @@ $git cherry-pick 4c97ff3
        [xxx 477939e] 测试删除本地分支
         2 files changed, 9 insertions(+), 1 deletion(-)
        ```
-
     4. 如果我们没注意到这个提交的信息，可以使用以下命令查看，里面有Date可提交人，以及提交信息
 
        ```
@@ -218,23 +212,32 @@ $git cherry-pick 4c97ff3
        Deleted branch xxx (was 9a317f5).
        ```
 
-    10. 强制删除后执行`git log -g`，我们可以得到这个
+    7. 强制删除后执行`git log -g`，我们可以得到这个
 
-        ```
-        commit e4f843a1cb43d375c5d5c3e567f1cf931855261a (HEAD -> master, origin/master)
-        ```
+       ```
+       commit e4f843a1cb43d375c5d5c3e567f1cf931855261a (HEAD -> master, origin/master)
+       ```
 
-    11. 下一步我们拿到这个`e4f843a1cb43d375c5d5c3e567f1cf931855261a`，删除分支的那条记录标志，然后执行
+    8. 下一步我们拿到这个`e4f843a1cb43d375c5d5c3e567f1cf931855261a`，删除分支的那条记录标志，然后执行
 
-        ```
-        git branch recover-xxx e4f843a1cb43d375c5d5c3e567f1cf931855261a
-        //然后我们查看下本地分支情况
-        git branch -a
-        //可以得到如下
-        * master
-          recover-xxx
-          remotes/origin/master
-          remotes/origin/xxx
-        ```
+       ```
+       git branch recover-xxx e4f843a1cb43d375c5d5c3e567f1cf931855261a
+       //然后我们查看下本地分支情况
+       git branch -a
+       //可以得到如下
+       * master
+         recover-xxx
+         remotes/origin/master
+         remotes/origin/xxx
+       ```
 
-    12. 
+
+11. 如何使用`git bash`给远端新开一个分支存储本地之前从同一仓库`clone`下来的并做过更改的文件？
+
+    假设需要新开一个`production`分支，注意远端和本地之前都是没有这个分支，防止冲突
+
+    1. `git branch production`本地新开一个分支
+    2. `git checkout production`切换到该分支
+    3. `git branch -a`查看所有分支，`git branch -r`查看远端分支，可以看到分支已创建，可省略此步骤
+    4. `git push origin production:production`或者`git push origin production`都可以将本地分支上到远程
+    5. `git add .` => `git commit -a '提交更改'` => `git push`然后所有修改过的代码都已经上到远程
