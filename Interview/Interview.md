@@ -790,7 +790,181 @@
        )
        ```
 
-    19. 事件代理
+    5. 事件代理
+
+       1. 如果一个节点中的子节点是动态生成的，那么要注册事件则应该注册在父节点上。
+
+       2. ```javascript
+          let ul = document.querySelector('#ul')
+          ul.addEventListener('click', (event) => {
+              console.log(event.target)
+          })
+          ```
+
+       3. 优点： 节省内存；不需要给子节点注销事件
+
+19. 跨域
+
+    1. 主要用来防止`CSRF`攻击（利用用户的登录状态发起恶意请求），只是防止，并不能完全阻止，因为请求毕竟是发出去了。
+
+    2. `JSONP`利用`<script>`标签没有跨域限制的漏洞，
+
+       优点：兼容性好
+
+       缺点：只支持get请求
+
+       ```javascript
+       <script src="http://domain/api?param=aa&param1=bb&callback=jsonp"></script>
+       <script>
+           function jsonp(data) {
+           	console.log(data)
+       	}
+       </script>
+       ```
+
+       封装多个请求回调函数相同的`JSONP`的简单实现
+
+       ```javascript
+       function jsonp(url, callback, success) {
+           let script = document.createElement('script')// 创建一个script标签，包含url,type,async
+           script.url = url
+           script.async = true
+           script.type = 'text/javascript'
+           window[callback] = function(data) {
+               success & success(data)
+           }
+           document.body.appendChild(script)
+       }
+       jsonp('http://abc', 'callback', function(value)) {
+             console.log(value)
+       }
+       ```
+
+    3. `CORS`需要浏览器端和后端同时支持，`IE8和IE9`需要通过`XDomainRequest`来实现
+
+       `XDomainRequest`[参考](<https://developer.mozilla.org/zh-CN/docs/Web/API/XDomainRequest>)，`IE10`中被包含`CORS`的`XMLHttpRequest`取代了，其他浏览器不兼容
+
+       通过`CORS`解决跨域问题，会在发送请求时出现两种情况，分别为**简单请求和复杂请求**
+
+       **简单请求**：`get head post`；`Content-Type`仅限以下三者之一：`text/plain multipart/form-data application/x-www-form-urlencoded`
+
+       请求中的任意`XMLHttpRequestUpload`对象均没有注册任何事件监听器；但是可以使用`XMLHttpRequest.upload`属性访问
+
+       **复杂请求**：除简单请求之外的即是复杂请求
+
+       复杂请求首先会发起一个预检请求，`option`方法，通过该请求确定服务端是否允许跨域请求。
+
+       `tips`：注意使用`Node`配置`CORS`可能会踩到`Authorization`字段验证的坑，解决方法：
+
+       ```javascript
+       // 在回调中过滤option方法
+       res.statusCode = 204
+       res.setHeader('Content-Length', 0)
+       res.send()
+       ```
+
+       
+
+       **document.domian：**此方式只适用于二级域名相同的情况下的跨域，如`a.test.com和b.test.com`，只要在页面中添加`document.domain='test.com'`表示二级域名相同即可实现跨域
+
+       **postMessage：**通常用于获取的嵌入页面的第三方页面的数据，一个页面发送消息，另一个页面判断来源并接收信息
+
+       ```javascript
+       // 发送信息端
+       window.parent.postMessage('message', 'http://test.com')
+       // 接收信息端
+       var mc = new MessageChannel()
+       mc.addEventListener('message', event => {
+           var origin = event.origin || event.originalEvent.origin
+           if(origin === 'http://test.com') {
+               console.log('验证通过')
+           }
+       })
+       ```
+
+20. **存储**
+
+    
+
+    | 特性         | cookie                                   | localStorage             | sessionStorage   | indexDB                  |
+    | ------------ | ---------------------------------------- | ------------------------ | ---------------- | ------------------------ |
+    | 数据生命周期 | 一般由服务器端生成，可设置过期时间       | 除非被清理，否则一直存在 | 页面关闭就被清理 | 除非被清理，否则一直存在 |
+    | 数据存储大小 | 4K                                       | 5M                       | 5M               | 不限                     |
+    | 与服务端通信 | 每次都会携带在header中，对请求性能有影响 | 不参与                   | 不参与           | 不参与                   |
+    | 适用场景     | 不建议用于存储                           | 不经常改变的数据         | 经常改变的数据   | 存储数据量大             |
+
+    `cookie安全`：`value`属性如果用于保存登录状态，应该加密而不是适用明文；
+
+    `http-only`设置不能通过`Js`访问，防止`XSS`攻击
+
+    `secure`只能在`https`请求中携带
+
+    `same-site`设置浏览器不能再跨域请求中携带`cookie`，防止`CSRF`攻击
+
+    **Service Worker**
+
+    其为运行在浏览器背后的`独立线程`，可以用来实现缓存功能，因为涉及到请求拦截，所以必须使用`https`协议保障安全。
+
+    实现缓存功能的三个步骤：
+
+    1. 注册`Service Worker`
+    2. 监听`install`事件后即可缓存需要缓存的文件
+    3. 下次用户访问的时候就可以通过拦截请求的方式查询是否存在缓存，存在则直接读取，否则去请求数据
+
+    Devtools => application => Service Worker中查看
+
+    **Web Worker**
+
+    
+
+21. #### 浏览器的渲染原理
+
+    1. 了解这个是为了解决性能问题，执行JS文件有一个JS引擎，那么渲染也有一个渲染引擎（DOM）
+    2. 浏览器接收到`html`文件到DOM树：字节数据 => 字符串 => Token(标记化) => Node => DOM
+    3. CSSDOM和HTML类似
+    4. 俩DOM合并生成渲染树，然后根据渲染树布局（或者叫回流），然后调用GPU绘制，合成图层，渲染在屏幕上
+
+    **页面中插入大量的DOM，如何不卡顿？**
+
+    - 方法一：使用`requestAnimationFrame`的方式循环插入DOM，
+    - 方法二：使用**虚拟滚动**，只渲染可视区域的内容，不可见区域完全不渲染，当用户滚动鼠标的时候实时替换渲染的内容
+
+    **如何减少渲染阻塞**
+
+    1. 要想渲染快，可以减少渲染文件大小，并扁平层级，优化选择器
+    2. 将`script`标签放在`body`标签底部，因为在遇到`script`标签时，浏览器会暂停构建`DOM`，完成后再继续渲染，所以若想首屏加载快，不应该首屏就加载JS文件。若不放在底部，可以考虑给`script`标签添加`defer`或`async`属性，前者表示该JS文件会并行下载，但是会放到HTML解析完成后顺序执行，后者表示JS文件和解析不会阻塞渲染，适合用于没有任何依赖的JS文件。
+
+    **回流与重绘**
+
+    重绘：当前节点需要改变外观而不会影响布局的，比如颜色
+
+    回流：布局或几何属性需要发生改变
+
+    回流必定重绘，重绘不一定导致回流
+
+    重绘和回流其实也和 Eventloop 有关，参考[HTML文档](<https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model>)
+
+    **减少回流与重绘**
+
+    - 使用`transform`代替`top`后者会引起回流
+
+    - 使用`visibility`替换`display: none`，因为前者只会引起重绘，后者会引起回流
+
+    - 不要把节点属性值放入循环中当成变量
+
+      ```javascript
+      for(let i = 0; i < 1000; i++) {
+          // 获取 offsetTop 会导致回流，因为需要去获取正确的值
+          console.log(document.querySelector('.test').style.offsetTop)
+      }
+      ```
+
+    - 尽量不要使用`table`布局，因为其小改动会造成整个`table`重新布局
+    - 使用动画的速度跟回流次数成正比，尽量降低频率，或者使用`requestAnimationFrame`
+    - CSS 选择符**从右往左**匹配查找，避免节点层级过多
+    - 将频繁重绘或者回流的节点设置为图层，图层能够阻止该节点的渲染行为影响别的节点。比如对于 `video` 标签来说，浏览器会自动将该节点变为图层。可使用`will-change`和`video`,`iframe`生成新图层
+
+
 
 
 
