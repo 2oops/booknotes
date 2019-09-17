@@ -61,7 +61,7 @@
 
    ```
    $git commit -m 'first commit'
-   $git reset HEAd~
+   $git reset HEAD~
    // 这样就将本地的commit撤销了，可以重新add
    ```
 
