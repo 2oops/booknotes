@@ -964,7 +964,55 @@
     - CSS 选择符**从右往左**匹配查找，避免节点层级过多
     - 将频繁重绘或者回流的节点设置为图层，图层能够阻止该节点的渲染行为影响别的节点。比如对于 `video` 标签来说，浏览器会自动将该节点变为图层。可使用`will-change`和`video`,`iframe`生成新图层
 
+22. **安全防范**
 
+    1. **XSS攻击**：说白了就是想尽办法将可以执行的代码（比如说脚本代码）注入到网页中，又分为**持久型和非持久型**
+
+    2. 持久型是攻击代码写入到了数据库中，可想而知，攻击范围会变大
+
+    3. 非持久型则是一般通过**修改URL参数**的方式注入攻击代码，诱导用户访问链接从而进行攻击。一般`Chrome`浏览器可以帮用户自动防御此种攻击。
+
+    4. 对于`XSS`攻击来说，一般有以下两种方法防御：
+
+       - 转义字符，即转义输入输出的内容
+
+       - CSP，建立白名单（推荐），即明确告诉浏览器哪些资源可以加载和执行，兼容性不错
+
+       - 通常可用以下两种方式开启CSP：
+
+         1. 设置HTTP header中的`Content-Security-Policy` [参考](<https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy>)
+         2. 设置`meta`标签为`<meta http-equiv="Content-Security-Policy>"`
+
+         ```http
+         // 以http header 为例
+         Content-Security-Policy: default-src 'self' // 只允许加载本站资源
+         Content-Security-Policy: img-src https://* // 只允许加载https协议图片
+         Content-Security-Policy: child-src 'none'  // 允许加载任何来源框架
+         ```
+
+    5. **CSRF攻击**，跨站请求伪造，原理是攻击者构造一个后端请求地址，诱导用户点击或通过某些途径自动发起请求，一般针对登录态。
+    6. 防范：
+       - get请求不对数据进行修改
+       - 不让第三方网站访问到用户cookie
+       - 阻止第三方请求接口
+       - 请求时附带token或其他验证
+    7. 实际操作
+       - `same-site` 对cookie设置该属性可以表示cookie不随跨域请求发送，但是并不是所有浏览器兼容
+       - 验证`Referer`判断请求是否是第三方网站发起
+       - `token`，服务器下发一个token，每次请求都携带上，服务器验证token有效性
+
+    8. **点击劫持**：利用`iframe`诱导用户点击
+
+    9. 防范：`X-FRAME-OPTIONS`专为防御用`iframe`嵌套的点击劫持效应。
+
+       ```http
+       X-FRAME-OPTIONS: DENY，//表示页面不允许通过 iframe 的方式展示
+       X-FRAME-OPTIONS: SAMEORIGIN //表示页面可以在相同域名下通过 iframe 的方式展示
+       X-FRAME-OPTIONS: ALLOW-FROM //表示页面可以在指定来源的 iframe 中展示
+       ```
+
+    10. **中间人攻击**
+        1. 攻击者同时与客户端和服务端建立了连接，并让对方都认为连接是安全的，但实际上整个过程都被攻击者控制了，攻击者可以获得和修改通信信息。如`公共Wifi`，`https`可以防中间人攻击，但前提是完全关闭了`http`访问，否则`https`可能被降级为`http`从而有可能遭受中间人攻击。
 
 
 
