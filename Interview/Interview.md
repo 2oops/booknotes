@@ -1012,7 +1012,73 @@
        ```
 
     10. **中间人攻击**
+
         1. 攻击者同时与客户端和服务端建立了连接，并让对方都认为连接是安全的，但实际上整个过程都被攻击者控制了，攻击者可以获得和修改通信信息。如`公共Wifi`，`https`可以防中间人攻击，但前提是完全关闭了`http`访问，否则`https`可能被降级为`http`从而有可能遭受中间人攻击。
 
+23. **图片优化**
 
+    1. 假设一张`100*100`大小的图片，那么图像上就有10000个像素点，如果按`RGBA`存储，那么每个像素需要4个通道，每个通道一个字节（也就是8位），这张图片的大小也就是（10000 * 4 * 1 / 1024）约为39KB。
+    2. 所以优化图片有两个思路：
+       - 减少像素点
+       - 减少每个像素点所能显示的颜色
+    3. 如何去优化：
+       - 能用CSS的就不用图片
+       - 移动端可使用CDN加载，计算出适配屏幕的宽度，然后去请求相应裁剪好的图片，而不是加载原图
+       - 小图使用`base64`或`png`或`svg`，多图可使用雪碧图
+       - 使用WebP格式能满足要求则使用该格式，虽然兼容性不是很好，但是该格式的图像压缩算法更优，压缩后的图片体积更小，而且其图像质量肉眼无法识别。
+       - 照片适合使用`jpeg`格式
+
+24. **DNS预解析、预加载、预渲染、懒执行、懒加载**
+
+    懒执行：将某些逻辑延迟到要用到的时候在执行，可以使用定时器或事件触发
+
+    懒加载：将不关键的资源延后加载，如图片可设置图片标签的`src`为一个占位符，将真实图片资源放在一个自定义属性中，当进入自定义区域时，将自定义属性替换为`src`属性，即实现了图片的懒加载。
+
+    **CDN**：就近加载资源，对于`CDN`加载静态资源要注意`CDN`域名要和主域名不同，不然每次请求都会带上`cookie`，浪费资源。
+
+    ```html
+    <meta http-equiv="x-dns-prefetch-control" content="on"> //用meta信息告诉浏览器当前页要做预解析
+    <link rel="dns-prefetch" href="www.baidu.com"> // 页面header中使用link标签强制进行dns解析
+    <meta http-equiv="x-dns-prefetch-control" content="off"> //避免多页面重复dns解析造成重复dns查询次数
+    <link rel="preload" href="http://baidu.com">// 不阻塞onload事件，适合不影响首屏但重要的文件加载，但兼容性不好
+    <link rel="prerender" href="http://baidu.com">// 确保用户会在之后打开这个页面，否则提前将下载的资源先在后台渲染就是浪费资源
+    ```
+
+25. **节流和防抖**
+
+    1. 假设一个场景，滚动事件发生时会发起网络请求，但是我们不希望页面在滚动时一直发请求，而是隔一段时间发一次请求，于是就有了节流。
+
+       ```javascript
+       const throttle = (func, wait = 50) => {
+           let lastTime = 0
+           return function(...args) {
+               let now = +new Date()
+               if(now - lastTime > wait) {
+                   lastTime = now
+                   func.apply(this, args)
+               }
+           }
+       }
+       setInterval(throttle(() => {
+           console.log(2)
+       }, 500), 1)
+       ```
+
+       
+
+    2. 防抖是说，点击事件触发的请求，我们不希望用户每点一次就发一次请求，而是隔一段时间没有再次点击的情况下才再发请求。
+
+       ```javascript
+       const debounce = (func, wait = 50) => {
+           let timer = 0
+           return function(...args) {
+               if(timer) clearTimeout(timer)
+               timer = setTimeout(() => {
+                   func.apply(this, args)
+               }, wait)
+           }
+       }
+       ```
+
+    26. 
 
