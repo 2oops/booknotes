@@ -12,4 +12,70 @@
 
    Vue 的双向绑定机制采用**数据劫持结合发布/订阅模式**实现的: 通过 `Object.defineProperty()`来劫持各个属性的 `setter，getter`，在数据变动时发布消息给订阅者，触发相应的监听回调。
 
-   **观察者模式和发布/订阅模式**不能混淆一谈，其实订阅模式有一个调度中心，对订阅事件进行统一管理。而观察者模式可以随意注册事件，调用事件
+   **观察者模式和发布/订阅模式**不能混淆一谈，其实订阅模式有一个调度中心，对订阅事件进行统一管理。而观察者模式可以随意注册事件，调用事件。
+
+***
+
+#### Vue的内部运行机制
+
+1. 响应式系统
+
+   `MVVM`模型如何通过操作对象更新到视图，核心实现在于**响应式系统**，`Vue`基于`Object.defineProperty`实现该系统，然后通过`observer`使对象变成可观察的。在`new Vue()`到`$mount`这个阶段，会对数据进行初始化。
+
+   以下模拟简略的响应式系统
+
+   ```javascript
+   // 用来模拟视图更新的函数
+   function cb(val) {
+     // 这里可以是渲染视图的方法
+     console.log("view updated")
+   }
+   
+   // 实现响应式
+   function defineReactive(obj, key, val) {
+     Object.defineProperty(obj, key, {
+       configurable: true,
+       enumerable: true,
+       get: function reactiveGetter() {
+         return val;
+       },
+       set: function reactiveSetter(newVal) {
+         if( newVal === val) return;
+         cb(newVal)
+       }
+     })
+   }
+   
+   // observer传入value，即需要做响应式的对象
+   // 通过遍历所有属性的方式对该对象的每个属性都通过defineReactive处理
+   // 实际上observer会进行递归调用，此处去掉了该过程
+   function observer(value) {
+     if(!value || (typeof value !== 'object')) {
+       return
+     }
+   
+     Object.keys(value).forEach((key) => {
+       defineReactive(value, key, value[key])
+     })
+   }
+   
+   class Vue { // Vue构造类
+     //options的data在Vue的构造函数中做处理，
+     //data本为函数，这里暂当作对象处理
+     constructor(options) {
+       this._data = options.data;
+       observer(this._data);
+     }
+   }
+   
+   let myVue = new Vue({
+     data: {
+       test: 'this is test'
+     }
+   })
+   // 视图更新
+   console.log(myVue._data.test) // 'this is test'
+   myVue._data.test = "update" // 'view updated' => 'update'
+   ```
+
+2. 
