@@ -1080,5 +1080,160 @@
        }
        ```
 
-    26. 
+
+#### Vue
+
+1. 生命周期钩子函数
+
+   `beforeCreate`获取不到`props`和`data`，因为这些数据都初始化在`initState`中
+
+   `created`可以访问到上面的数据，但是组件还未挂载
+
+   `beforeMount`挂载前开始创建虚拟`DOM`
+
+   `mounted`将`虚拟DOM`渲染为`真实DOM`并渲染数据，有子组件先挂载子组件
+
+   `beforeUpdate`数据更新前调用
+
+   `updated`数据更新后调用
+
+   `activated`和`deactivated`为`keep-alive`独有的生命周期，`keep-alive`包裹的组件在切换时不会被销毁，而是缓存到内存中并执行`deactivated`函数，	命中缓存渲染后会执行`activated`函数
+
+   `beforeDestory`移除事件、定时器等，防止内存泄漏
+
+   `destroyed`销毁，有子组件的会先销毁子组件
+
+2. 组件通信
+
+   - 父子组件通信：单向数据流，可使用`v-model`语法糖实现，因为`v-model`会默认解析成名为`value`的`prop`和名为`input`的事件，这种方法是典型的双向绑定，但本质上来说，还是通过事件的方法让父组件修改数据。
+
+     此外还有`$parent`和`$children`、`$listeners`和`sync`，`$listeners` 属性会将父组件中的 (不含 `.native` 修饰器的) `v-on` 事件监听器传递给子组件，子组件可以通过访问 `$listeners` 来自定义监听器。
+
+     `.sync`是个语法糖，可以实现简单父子组件通信
+
+     ```javascript
+     <input :value.sync="value"/>
+     // 同以下写法
+     <input :value="value" @update:value="v => value = v"><comp>
+     <script>
+         this.$emit('update: value', 1)
+     </script>
+     ```
+
+   - 兄弟组件通信：`this.$parent.$children`，在`$children`中通过组件的`name`查询到组件实例，然后通信。
+
+   - 跨多层级组件通信：`provide / inject`，文档不推荐直接使用在业务中，用法如下
+
+     假设有父组件A，及跨多层级的子组件B
+
+     ```javascript
+     export default {
+         provide: {
+             data: 1
+         }
+     }
+     //子组件
+     export default {
+         inject: ['data'],
+         mounted() {
+             console.log(this.data) // 1
+         }
+     }
+     ```
+
+   - 任意组件间通信：`Vuex`或`Event Bus`
+
+3. `extend`扩展组件生成一个构造器
+
+   ```javascript
+   let Component = Vue.extend({ //创建组件构造器
+       template: '<div>test</div>'
+   })
+   new Component().$mount('#app') // 挂载到app下
+   // 除此之外还可以扩展已有的组件
+   let myComponent = Vue.extend(Component)
+   new myComponent({
+       created() {
+           console.log("a")
+       }
+   })
+   new myComponent().$mount('#app')
+   ```
+
+4. `mixin`和`mixins`
+
+   `mixin`用于全局混入，会影响到每个组件实例，例如插件的初始化、封装好的`ajax`全局混入或工具函数就可以使用`mixin`，文档不建议使用
+
+   ```javascript
+   Vue.mixin({
+       beforeCreate() {
+           //这里会影响到每个组件的beforeCreate钩子函数
+       }
+   })
+   ```
+
+   `mixin`适用于多个组件中相同业务逻辑的剥离，如上拉下拉加载数据等逻辑，是最常用的扩展组件的方式。
+
+5. `computed`和`watch`
+
+   `computed`值有缓存，只有值发生变化时才会返回内容，一般适合一些需要依赖别的属性动态获取值的场景。
+
+   `watch`监听到值变化就会执行回调，适用于需要对监听到值变化后做较复杂逻辑处理的情况。
+
+   两者都支持对象写法：
+
+   ```javascript
+   vm.$watch('obj', {
+       deep: true,
+       immeditate: true,
+       handler: function(val, oldVal) {
+       }
+   })
+   ```
+
+6. `keep-alive`
+
+   作用：保持一些组件的状态防止多次渲染。
+
+7. `v-show`和`v-if`
+
+   `v-show`只是在`display: none`和`display: block`之间切换，无论条件是什么都会被渲染出来，后面切换的只是`CSS`，`DOM`会一直保留着。`v-show`在初始渲染时有更高的开销，但是切换时的开销小，适用于频繁切换的场景。
+
+   `v-if`为`false`时不会渲染出来，知道为`true`，切换时会触发销毁/挂载事件，所以切换时开销较大，适合不经常切换的场景。可以在必要的时候才去渲染组件，减少页面渲染开销。
+
+8. `data`是函数还是对象的问题
+
+   组件复用时所有的组件实例都会共享`data`，此时如果是对象的话，就会造成一个组件修改`data`后影响到其他组件，所以组件化时使用的是函数。
+
+   而`new Vue()`方式，生成的只有一个根组件，不会复用，对象或函数都不影响。
+
+***
+
+#### Vue进阶
+
+1. `Object.defineProperty`的缺陷
+
+   `Vue`响应式原理请见相应目录。
+
+   如果通过下标方式修改数组数据或者给对象新增属性并不会触发组件渲染，但`Vue`内部通过重写函数的方式解决了该问题。
+
+2. 编译过程
+
+   模板解析为`AST`，然后优化，再然后被编译成`render`函数，然后通过执行`render`函数生成虚拟`DOM`，最终又以真实`DOM`渲染。
+
+3. `NextTick`原理
+
+   其可以让我们在下次`DOM`更新循环结束之后执行延迟回调，用于获取更新后的`DOM`。它既可以是宏任务，又可以是微任务。
+
+***
+
+#### 监控
+
+> 前端监控一般分为三种：页面埋点、性能监控、异常监控
+
+
+
+
+
+
 
