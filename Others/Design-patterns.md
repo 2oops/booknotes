@@ -590,3 +590,124 @@ window.onload = ( window.onload || function(){} ).after(function(){
 * 用return退出多重循环
 ```
 
+#### 设计模式进阶
+
+1. 工厂模式
+
+   场景：假设有一份复杂的代码，但是我不需要知道里面有多复杂、内部逻辑怎么写的，只需要会调用，给它传参就可以使用，最后返回我一个实例即可，这个构造过程即是工厂。以下为简单的工厂模式：
+
+   ```javascript
+   class People {
+       constructor(name) {
+           this.name = name
+       }
+       getName() {
+           console.log(this.name)
+       }
+   }
+   class Factory {
+       static create(name) {
+           return new People(name)
+       }
+   }
+   Factory.create('2oops').getName() // 2oops
+   ```
+
+   从以上可知，工厂隐藏了创建实例的复杂度，只需要提供一个接口，清晰简单。
+
+   在`Vue`源码中，也有用到工厂模式，比如创建异步组件。
+
+2. 单例模式
+
+   场景：全局缓存、全局状态管理等只需要一个对象的时候，可以考虑使用单例模式。其核心就是保证全局只有一个对象可以访问，如`Vue`中，会保证`Vue`只能注册一次。
+
+   ```javascript
+   class Singleton {
+       constructor() {}
+   }
+   Singleton.getInstance = (function() {
+      let instance
+      return function() {
+          if(!instance) {
+              instance = new Singleton()
+          }
+          return instance
+      }
+   })()
+   let s1 = Singleton.getInstance()
+   let s2 = Singleton.getInstance()
+   console.log(s1 === s2)
+   ```
+
+3. 适配器模式
+
+   顾名思义，适配器用来解决的是两个接口不兼容或不统一的时候，不改变已有的接口，而是通过包装一层的方式实现两个接口的协作。
+
+   ```javascript
+   class Plug {
+       getHole() {
+           return '二孔插座'
+       }
+   }
+   class TargetPlug {
+       constructor() {
+           this.plug = new Plug()
+       }
+       getHole() {
+           return this.plug.getHole() + '，三孔插座'
+       }
+   }
+   let targetPlug = new TargetPlug()
+   targetPlug.getHole() // 二孔插座，三孔插座
+   ```
+
+4. 装饰模式
+
+   即是不改变已有的接口，而是给对象添加功能，有如房屋装饰。`React`中，装饰模式很普遍。
+
+   ```javascript
+   import { connect } from 'react-redux'
+   class MyComponent extends React.Component {
+       // ...
+   }
+   export default connect(mapStateToProps)(MyComponent)
+   ```
+
+   ```javascript
+   //简单的装饰模式
+   function readonly(target, key ,descriptor) {
+       descriptor.writable = false
+       return descriptor
+   }
+   class Test {
+       @readonly
+       name = 'aaa'
+   }
+   let test = new Test()
+   test.name = 'bbb' // 会报错
+   ```
+
+5. 代理模式
+
+   场景：实际使用时，父节点绑定事件作为代理去拿到真实节点
+
+   ```javascript
+   <ul id="ul">
+       <li>1</li>
+       <li>2</li>
+       <li>3</li>
+       <li>4</li>
+       <li>5</li>
+   </ul>
+   <script>
+       let ul = document.querySelector('#ul')
+       ul.addEventListener('click', (event) => {
+           console.log(event.target);
+       })
+   </script>
+   ```
+
+6. 发布订阅模式
+
+   场景： 如上例中的`addEventListener`，点击按钮触发点击事件即使用了发布订阅模式。`Vue`中的响应式也是使用了该模式。
+
