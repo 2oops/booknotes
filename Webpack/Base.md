@@ -128,9 +128,56 @@
    }
    module.exports = [serverConfig, clientConfig]
    ```
+
 6. 模块热替换是指在应用程序执行过程中替换、添加或删除模块而无需重新加载整个页面。`devServer: {hot: true}`
 
    程序代码 =>HMR runtime检查更新 => HMR runtime异步更新 => 通知应用程序代码 => 要求HMR runtime应用更新 => HMR runtime同步更新
 
-   
+***
+
+#### 真实项目配置
+
+参考[webpack：从入门到真实项目配置](<https://juejin.im/post/59bb37fa6fb9a00a554f89d2>)
+
+1. 浏览器不支持`module.exports`
+
+2. `npm i --save-dev @babel/core babel-loader`
+
+3. `babel-preset-env`的作用是告诉babel使用哪种编码规则进行文件处理
+
+   ```javascript
+   "babel": {
+       "presets": ['@babel/env']
+   }
+   ```
+
+     `npm i --save-dev @babel/preset-env`，[报错参考](<https://github.com/webpack/webpack/issues/6568>)
+
+4. `url-loader`和`file-loader`两个库处理图片等
+
+5. `css-loader` 和 `style-loader `库。前者可以让 CSS 文件也支持 import，并且会解析 CSS 文件，后者可以将解析出来的 CSS 通过标签的形式插入到 HTML 中，所以后面依赖前者。
+
+6. 使用 `extract-text-webpack-plugin` 插件将 CSS 文件打包为一个单独文件
+
+   `npm i -D extract-text-webpack-plugin@next`
+
+7. 分离代码
+
+8. 抽取共同代码,使用 webpack 自带的插件 `CommonsChunkPlugin`,`webpack4+`删除了该插件，新增了优化后的`SplitChunksPlugin`，[报错参考](<https://blog.csdn.net/yusirxiaer/article/details/82917144>)
+
+9. `clean-webpack-plugin`删除不需要的文件，报错参考[' CleanWebpackPlugin is not a constructor'](<https://www.jianshu.com/p/0e99366ce796>)
+
+10. 每次新增 JS 文件我们都需要手动在 HTML 中新增标签，现在我们可以通过一个插件来自动完成这个功能，即是`html-webpack-plugin`，[github](<https://github.com/johnagan/clean-webpack-plugin#options-and-defaults-optional>)
+
+11. 按需加载代码,`router`
+
+12. 自动刷新,安装`webpack-dev-server`
+
+13. build生产环境代码，添加插件`optimize-css-assets-webpack-plugin`，`UglifyJsPlugin`，[配置参考](<https://juejin.im/post/59bb37fa6fb9a00a554f89d2>)
+
+14. 优化点：
+
+  `vendor` 这种常用的库我们一般可以使用 CDN 的方式外链进来。
+
+
 
