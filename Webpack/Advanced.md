@@ -234,3 +234,46 @@
 
       未完待续......
 
+
+2. 深入浅出`Babel`，架构和原理 + 实战
+
+   参考[深入浅出 Babel 上篇：架构和原理 + 实战](<https://juejin.im/post/5d94bfbf5188256db95589be>)
+
+   1. Babel是什么？
+
+      Babel is a JavaScript compiler.即是说，babel是一个`JS`编译器。[官网](<https://babeljs.io/>)
+
+      Babel doesn't do type checking，不做类型检查
+
+      Babel is built out of plugins. Babel由插件构成
+
+      Debuggerable & Compact，尽可能减少代码量而不依赖庞大的运行时。
+
+      Babel支持转换最新的`JavaScript`规范语法，还支持`JSX`，`Typescript`，`Flow`
+
+   2. Babel处理流程
+
+      1. 词法解析：将字符串形式的代码转换为`Token`令牌。
+      2. 语法解析：`Token`数组转成`AST`，`AST`会有很多节点类型，如果节点类型很多，那么无疑抽象树也是庞大的，但是，审查解析后的`AST`可以使用强大的`ASTExplorer`。
+      3. 转换`AST`:对其进行遍历，这个过程会对节点进行增删改查，Babel所有插件的工作如语法转换和代码压缩等都是在这个阶段进行。
+      4. `AST`转换回字符串形式的`JS`,同时还会生成`sourceMap`
+
+   3. Babel架构
+
+      1. 通过[微内核](<https://juejin.im/post/5d7ffad551882545ff173083#heading-10>)实现，核心小，大部分功能通过插件扩展实现。
+
+      2. 架构如图
+
+         ![img](https://user-gold-cdn.xitu.io/2019/10/2/16d8d0cd5a3f3a0c?imageslim)
+
+      3. `@babel/core` 这也是上面说的‘微内核’架构中的‘内核’。主要用来加载和处理配置，加载插件，调用`Parser`进行语法解析，生成`AST`，遍历`AST`，并使用`访问者模式`应用插件对其进行转换，生成字符串代码，包括`Source Map`
+
+      4. 内核周边支持，包括`Parser(@babel/parser)   @babel/traverse   @babel/generator`
+
+      5. 插件支持：语法插件，转换插件，预定义集合(`@babel/presets-*`)
+
+      6. 插件开发辅助：`@babel/template   @babel/helper-&`
+
+      7. 工具：`@babel/node   @babel/register  @babel/cli`
+
+   4. 访问者模式
