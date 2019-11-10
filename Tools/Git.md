@@ -241,3 +241,57 @@
     3. `git branch -a`查看所有分支，`git branch -r`查看远端分支，可以看到分支已创建，可省略此步骤
     4. `git push origin production:production`或者`git push origin production`都可以将本地分支上到远程
     5. `git add .` => `git commit -a '提交更改'` => `git push`然后所有修改过的代码都已经上到远程
+
+12. `git`常用命令
+
+    - `git add .` 表示添加新文件和编辑过的文件不包括删除的文件
+
+    - `git add -A .` 来一次添加所有改变的文件
+    - `git add -A` 表示添加所有内容
+    - `git add -u` 表示添加编辑或者删除的文件，不包括新添加的文件
+    - `git push -u origin master` 推送到远程仓库
+    - `git branch -av` 查看每个分支的最新提交记录
+    - `git branch -vv` 查看每个分支属于哪个远程仓库
+    - 删除本地分支 `git branch -d dev`
+    - 同步删除远程分支 `git push origin :dev`
+
+13. 修改远程仓库地址
+
+    Methods1，先删后加:
+
+    - `git remote rm origin` 先删除
+    - `git remote add origin 仓库地址` 链接到到远程git仓库
+
+    Methods2，修改命令:
+
+    - `git remote set-url origin 仓库地址`
+
+14. 如果`git pull`失败咋整？
+
+    1. 首先从远程的origin的master主分支下载最新的版本到origin/master分支上
+
+       `git fetch origin master`
+
+    2. 比较本地的master分支和origin/master分支的差别
+
+       `git log -p master..origin/master`
+
+    3. 进行合并
+
+       `git merge origin/master`
+
+15. 拉取远程仓库指定分支到本地
+
+    - 首先要与origin master建立连接：`git remote add origin git@github.com:XXXX/nothing2.git`
+    - 切换到其中某个子分支：`git checkout -b dev origin/dev`
+    - 可能会报这种错误:
+
+    ```
+    fatal: Cannot update paths and switch to branch 'dev' at the same time.
+    Did you intend to checkout 'origin/dev' which can not be resolved as commit?
+    ```
+
+    - 原因是你本地并没有dev这个分支，这时你可以用 `git branch -a` 命令来查看本地是否具有dev分支
+    - 我们需要：`git fetch origin dev` 命令来把远程分支拉到本地
+    - 然后使用：`git checkout -b dev origin/dev` 在本地创建分支dev并切换到该分支
+    - 最后使用：`git pull origin dev` 就可以把某个分支上的内容都拉取到本地了
