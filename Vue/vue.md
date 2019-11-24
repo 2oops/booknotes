@@ -78,4 +78,9 @@
    myVue._data.test = "update" // 'view updated' => 'update'
    ```
 
-2. 
+
+
+
+#### 技术胖视频教程笔记(2019/11/11)
+
+1. 
