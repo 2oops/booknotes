@@ -10,6 +10,7 @@
     * [Vue](Vue/Vue.md)
     * [Vuex](Vue/Vuex.md)
     * [Vue-Router](Vue/Vue-Router.md)
+    * [Vue-Component](Vue/Vue-Comp.md)
 * [React](React/React.md)
 * [Flutter](Flutter/Flutter.md)
 * Css
