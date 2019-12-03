@@ -191,4 +191,204 @@
 
    消息的生产者只负责将消息放入队列，而不用关心消费者什么时间去消费，消费者又可以根据自己需要（缓冲区）来选择即时消费还是延迟消费，即都有了自己的生命周期，实现了时间上的解耦。
 
+#### Axios
 
+1. 请求格式
+
+   ```javascript
+   axios.get('../static/data.json', {
+         params: {id: 12}
+       }).then(res => {
+         console.log(res)
+       })
+   
+       axios({
+         methods: 'get',
+         url: '../static/data.json',
+         params: {id: 12}
+       }).then(res => {
+         console.log('methods')
+       })
+   
+       let formdata = new FormData()
+       axios.post('./post', formdata).then(res => {
+         console.log(res)
+       })
+   
+       axios.delete('/delete', {
+         params: {id: 12}
+       }).then(res => {
+         console.log(res)
+       })
+   
+       axios.delete('/delete', {
+         data: 'fas'
+       }).then(res => {
+         console.log(res)
+       })
+   
+       // 并发请求
+       axios.all([
+         axios.get('../static/data.json'),
+         axios.get('../static/city.json')
+       ]).then(
+         axios.spread((dataRes, cityRes) => {
+           console.log(dataRes, cityRes)
+         })
+       )
+   ```
+
+2. 基本配置和拦截器
+
+   ```javascript
+   let instance = axios.create({
+         baseUrl: 'http://localhost:8080',
+         timeout: 1000,
+         methods: 'get,post, put， delete, patch',
+         url: '../static/data.json',
+         params: {},
+         data: {},
+         headers: {
+           token: ''
+         }
+       })
+   
+       // axios全局配置
+       axios.defaults.timeout = 1000
+       axios.defaults.baseURL = 'http://localhost:8080'
+   
+       // axios实例配置
+       let instance1 = axios.create()
+       instance1.defaults.timeout = 3000
+   
+       // 请求配置
+       instance.get('../static/data.json', {
+         timeout: 5000
+       }).then(res => {
+         console.log(res)
+       })
+   
+       // 优先级：请求配置>实例配置>全局配置
+   
+       // 实际开发
+       let instance2 = axios.create({
+         baseURL: '',
+         timeout: 4000
+       })
+       let instance3 = axios.create({
+         baseURL: '',
+         timeout: 3000
+       })
+   
+       instance2.get('/xxx').then(res => {
+         params: {
+           id: 12
+         }
+       })
+   
+       instance3.get('/xxx').then(res => {
+         timeout: 4000
+       })
+   
+   
+       // 拦截器: 请求或响应被处理前拦截，分两种
+       // 请求拦截器
+       axios.interceptors.request.use(config => {
+         config.headers = {
+           auth: 'xiaopp'
+         }
+         return config
+       }, err => {
+         return Promise.reject(err)
+       })
+   
+       // 响应拦截器
+       axios.interceptors.response.use(res => {
+         return res
+       }, err => {
+         return Promise.reject(err)
+       })
+   
+       // 取消拦截器，声明，然后eject该拦截器
+       let interceptors = axios.interceptors.request.use()
+       axios.interceptors.request.eject(interceptors)
+   
+       axios.get('../static/data.json', {
+         timeout: 5000
+       }).then(res => {
+         console.log(res)
+       })
+   
+   
+       // 实际开发，需要登录接口和不需要登录接口
+       let instance4 = axios.create({})
+       instance4.interceptors.request.use(config => {
+         config.headers.token = 'sss'
+         // 不能使用
+         // config.headers = {
+         //   token: ''
+         // }
+         return config
+       })
+   
+       // 移动端开发
+       let instance_phone = axios.create({})
+       instance_phone.interceptors.request.use(config => {
+         // 请求前展示请求状态框
+         console.log('show')
+         return config
+       })
+       instance_phone.interceptors.response.use(res => {
+         // 隐藏请求状态框
+         console.log("hide")
+         return res
+       })
+   
+       instance_phone.get('../static/data.json', {
+         timeout: 5000
+       }).then(res => {
+         console.log(res)
+       })
+   ```
+
+3. 错误处理和取消请求
+
+   ```javascript
+   axios.interceptors.request.use(config => {
+         return config
+       }, err => {
+         // 请求错误401超时， 404
+         return Promise.reject(err)
+       })
+   
+       axios.interceptors.response.use(res => {
+         return res
+       }, err => {
+         // 500系统错误 502系统重启
+         return Promise.reject(`${err}>>>>`)
+       })
+   
+       axios.get('/xxx').then(res => {
+         console.log(res)
+       }).catch(err => {
+         console.log('error:', err)
+       })
+   
+   
+       // 取消请求
+       let source = axios.CancelToken.source()
+       axios.get('/xxx', {
+         CancelToken: source.token
+       }).then(res => {
+         console.log(">>>", res)
+       }).catch(err => {
+         console.log("err>>>", err)
+       })
+   
+       source.cancel('cancel http message')
+     }
+   ```
+
+   
+
+4. 封装
