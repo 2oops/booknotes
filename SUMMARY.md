@@ -21,6 +21,7 @@
     * [ES5](Javascript/ES5.md)
     * [ES6](Javascript/ES6.md)
     * [ES6-Advanced](Javascript/ES6-Advanced.md)
+    * [ES6-Review](Javascript/ES6-Review.md)
     * [ES7](Javascript/ES7.md)
 * [Typescript](Typescript/Typescript.md)
 * NodeJs
