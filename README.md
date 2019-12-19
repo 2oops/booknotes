@@ -34,6 +34,8 @@ https://github.com/2oops/booknotes.git
 |----Vue<br/>
 |----|----Vue<br/>
 |----|----Vuex<br/>
+|----|----Vue-Comp<br/>
+|----|----Vue-Router<br/>
 |----React<br/>
 |----Css<br/>
 |----|----Css3<br/>
@@ -43,7 +45,8 @@ https://github.com/2oops/booknotes.git
 |----|----ES5<br/>
 |----|----ES6<br/>
 |----|----ES7<br/>
-|----|----ES6-Advance<br/>
+|----|----ES6-Advanced<br/>
+|----|----ES6-Review<br/>
 |----Typescript<br/>
 |----NodeJs<br/>
 |----Database<br/>
@@ -69,5 +72,5 @@ https://github.com/2oops/booknotes.git
 
 #### About the author
 
-- Homepage
+- [Homepage](https://2oops.github.io)
 - Alipay QR code
