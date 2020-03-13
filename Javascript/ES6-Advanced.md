@@ -1,7 +1,5 @@
 # ES6-Advanced
 
-# ES6-Advance
-
 1. **改变对象的原型**，ES5的`getPrototypeOf()`方法和ES6添加的`setPrototypeOf()`方法
 
    ```java

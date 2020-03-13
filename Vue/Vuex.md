@@ -38,3 +38,6 @@
 
    参考[《Vuex源码解析》](https://github.com/answershuto/learnVue/blob/master/docs/Vuex%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90.MarkDown)
 
+4. Vuex实现了一个单项数据流，在全局拥有一个state存放数据，组件要更改state的数据时，需要通过mutation。
+5. 
+
