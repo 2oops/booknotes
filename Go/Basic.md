@@ -452,5 +452,43 @@
    }
    ```
 
-   
+6. **nil**
+
+   零值：
+
+   - bool - false， number - 0, string - ""
+
+   - 指针、切片、map、通道、函数、接口 - nil
+
+   nil和null有许多不同点：
+
+   - nil 不可比较， 但在Python中，None == None
+
+   - nil不是关键字或者保留字，也就是说变量名可以叫nil
+
+   - nil没有默认类型，也就是说 `fmt.Printf("%T", nil)`这种写法是错的
+
+   - 不同类型nil的指针是一样的
+
+     ```go
+     var arr []int
+     var num *int
+     fmt.Printf("%p\n", arr)
+     fmt.Printf("%p\n", num) // 0x0
+     ```
+
+   - 不同类型的nil不能比较
+
+   - 相同类型的nil值可能也无法比较
+
+   - 不同类型的nil占用内存的大小可能不一样
+
+     ```go
+     var m map[int]bool
+     fmt.Println( unsafe.Sizeof( m ) ) // 8
+     var c chan string
+     fmt.Println( unsafe.Sizeof( c ) ) // 8
+     ```
+
+     
 
