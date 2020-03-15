@@ -1,6 +1,15 @@
 **Go basic**
 
-1. 简介
+***
+
+基础包括以下：
+
+- 基本语法 =>类型 => 匿名变量 => 变量作用域 => 变量生命周期 => 指针 => 常量 => 类型别名
+- 容器 => 数组 => 切片 => range
+
+***
+
+**简介**
 
 2. 特性及优势：
 
@@ -241,18 +250,207 @@
    **切片复制**
 
    ```go
-   	slice1 := []int{1,2,3,4}
-   	slice2 := []int{5,4,3,2,1}
-   	copy(slice1, slice2)
+   slice1 := []int{1,2,3,4}
+   slice2 := []int{5,4,3,2,1}
+   copy(slice1, slice2)
    
-   	fmt.Println(slice1) // [5,4,3,2]
+   fmt.Println(slice1) // [5,4,3,2]
    ```
 
    **切片删除**
 
+   golang没有提供特定的接口，只能从切片本身的特性来删除元素，分别可以从开头位置删除、中间位置、尾部位置
+
+   ```go
+   a := []int{1,2,3}
+   a = a[N:] // 删除开头N个元素
+   // 或者使用append()删除开头N个元素
+   a = append(a[:0], append(a[:N])...)
+   a = a[:copy(a, a[N:])] // 将N+之后的元素拷贝过来，之前的不要了
+// 删除中间N个元素
+   a = append(a[:i], a[i+N:]...)
+   a = a[:i+copy(a[i:], a[i+N:])]
+   // 尾部删除
+   a = a[:len(a) - N]
+   // 删除指定元素
+   str := []string{"a","b", "c", "d", "e"}
+   index := 2
+   str = append(str[:index], str[index + 1:]...)
+   fmt.Println(str) // [a b d e]
+   ```
    
+   **多维切片**
+   
+   ```go
+   slice := [][]int{{1,2,3}, {1,2,3}}
+   slice[0] = append(slice[0], 4)
+   ```
+   
+   多维切片操作起来会涉及众多的布局和值，相比于在函数间传递数据结构的复杂，切片由于本身结构简单的优势，在函数间传递消耗的成本很小。
+   
+3. **range关键字**
 
+   ```go
+   // range
+   slice := []int{1,2,3,4}
+   for index, value := range slice {
+     fmt.Println(index, value, &value, &slice[index])
+   }
+   // range返回的value是一个副本，而不是对应元素的引用，所以可以看见value的地址和元素地址是不一样的
+   // 且value地址总是一样的，因为其只是在迭代过程中不断赋值
+   // 如果不需要index，可以使用_匿名变量忽略
+   for index := 2; index < len(slice); index++ {
+     fmt.Println(slice[index])
+   }
+   ```
 
+4. **map**
 
+   在其他语言中又称为字典、hash等
 
+   `var mapname map[keyType]valueType`
+
+   map是动态增长的，未初始化的值默认为nil，len()可以获取map中pair的对数
+
+   ```go
+   var mapLit map[string]int
+   mapLit = map[string]int{"name": 1, "value":2 }
+   fmt.Println(mapLit["name"]) // 1
+   fmt.Println(mapLit["one"]) // 0 使用未声明的key值默认为零值
+   ```
+
+   **map容量**
+
+   `mapLit := make(map[string]int, 100)`
+
+   **用切片作为map值**
+
+   ```go
+   mapSlice := make(map[string][]int)
+   mapslice2 := make(map[string]*[]int)
+   ```
+
+   **map遍历**
+
+   ```go
+   scene := make(map[string]int)
+   for k, v := range scene {
+     fmt.Println(k, v)
+   }
+   for k := range scene {
+     // 只遍历key值
+   }
+   // 如果想要特定的顺序的遍历结果，需要先排序
+   // 声明一个切片
+   var sceneList []string
+   for k := range scene {
+     sceneList = append(sceneList, k)
+   }
+   sort.Strings(sceneList)
+   ```
+
+   **map元素的删除和清空**
+
+   go并没有提供清空元素的方法，清空map元素最直接的方法就是新make一个map，因为go的并行垃圾回收效率远比清空函数高效。
+
+   **go语言的同步map sync**
+
+   go中，map在并发情况下，只读是线程安全的，同时读写是线程不安全的
+
+   ```go
+   // 举例来说
+   m := make(map[int]int) // 创建一个int到int的映射
+   // 开启一段并发代码，不停写入
+   go func() {
+     for {
+       m[1] = 1
+     }
+   }
+   // 继续并发，不停的读取map
+   go func() {
+     for {
+       _ = m[1]
+     }
+   }
+   // 无限循环，让并发不停地执行
+   for {}
+   // 这里会报错 fatal error: concurrent map read and map write
+   // 不停的同时读和写会引起竞态问题，map内部会对这种并发操作检查和提前发现
+   ```
+
+   需要并发读写时，一般的做法是加锁，但是这种效率不高，go在1.9版本后提供了一种效率较高的并发安全的sync。Map，其并不是以语言原生形态提供，而是在sync包下的特殊结构。
+
+   其有以下特性：
+
+   - 不需要初始化，直接声明即可
+   - 不能使用map的方式进行取值和设置等操作，而是是使用 sync.Map 的方法进行调用，Store 表示存储，Load 表示获取，Delete 表示删除
+   - 使用range配合一个回调函数进行遍历操作，通过回调函数返回内部遍历的值，Range 参数中回调函数的返回值在需要继续迭代遍历时，返回 true，终止迭代遍历时，返回 false。
+
+   ```go
+   import (
+   	"fmt"
+     "sync"
+   )
+   func main() {
+     var scene sync.Map
+     // 保存键值对
+     scene.Store("green", 90)
+     scene.Store("age", 20)
+     // 删除
+     scene.Delete("age")
+     // 遍历所有sync.Map的键值对
+     // Range() 方法可以遍历 sync.Map，遍历需要提供一个匿名函数，参数为 k、v，类型为 interface{}，
+     //每次 Range() 在遍历一个元素时，都会调用这个匿名函数把结果返回
+     scene.Range(func(k, v interface {}) bool ) {
+       fmt.Println("iterate: ", k, v)
+       return true
+     }
+   }
+   ```
+
+   sync.Map并没有提供获取map数量的方法，需要在其遍历时自行计算，同时在保证并发安全的情况下有一些性能损失，所以在非并发情况下，建议使用map。
+
+5. List(列表)
+
+   列表是一种非连续的存储容器，由多个节点组成，节点间通过一些变量记录彼此之间的关系，实现方法包括单链表、双链表等。列表使用`container/list`包实现，内部实现原理是双链表，能高效的进行任意位置的插入和删除操作。
+
+   ```go
+   // 初始化
+   var myList list.List
+   myList := list.New()
+   ```
+
+   列表的元素可以是任意类型，这既带来了便利，同时也会带来问题，比如放入了接口类型的值，取出值后，如果要进行类型转换会发生宕机。
+
+   **列表插入元素**`PushFront  PushBack`
+
+   ```go
+   // 列表插入方法
+   InsertAfter(v interface {}, mark * Element) * Element
+   InsertBefore(v interface {}, mark * Element) *Element
+   PushBackList(other *List)
+   PushFrontList(other *List)
+   ```
+
+   **删除元素**`Remove(element)`
+
+   **遍历元素**
+
+   ```go
+   myList := list.New()
+   myList.PushFront("2oops")
+   myList.PushBack(20)
+   // 保存一个句柄
+   element := myList.PushBack("center")
+   // 插入
+   myList.InsertBefore("left", element)
+   myList.InsertAfter("right", element)
+   myList.Remove(element)
+   
+   for i := myList.Front(); i != nil; i = i.Next() {
+     fmt.Println(i.Value) // 2oops 20 left center right
+   }
+   ```
+
+   
 
