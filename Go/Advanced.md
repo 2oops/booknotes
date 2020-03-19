@@ -208,7 +208,32 @@
 
    **包加载：**在执行main包的main函数之前，go引导程序对整个程序的包进行初始化。从main函数引用的包开始，逐级查找包的引用，直到找到没有引用其他包的包，最终生成一个包引用的有向无环图。然后将图转化为一棵树，从树的叶子节点逐层向上对包进行初始化。单个包初始化时，先初始化常量，然后全局变量，最后执行init函数。
 
-3. 
+3. 使用 export 指令可以将当前目录的值设置到环境变量 GOPATH中。
+
+   export GOPATH=`pwd`
+
+   建立gopath中的源码目录：**mkdir -p src/hello**
+
+   编译和运行：`go install hello`
+
+   bin目录下执行./hello
+
+   GOPATH路径建议随项目路径设置，避免不可预知的错误
+
+4. 功能常用内置包
+   - fmt io
+   - bufio 对io包的封装，并提供了缓冲数据功能
+   - sort 
+   - strconv 字符串和基本数据类型之间转换
+   - sync 实现中锁机制和其他同步互斥机制
+   - flag 命令行参数规则定义和解析
+   - encoding/json 对象《=》JSON字符串间转换
+   - html/template 主要实现了 web 开发中生成 html 的 template 的一些函数
+   - net/http
+   - ox/exec linux命令相关实现
+   - reflect
+   - bytes  log
+5. 自定义包
 
 
 
