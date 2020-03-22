@@ -221,6 +221,7 @@
    GOPATH路径建议随项目路径设置，避免不可预知的错误
 
 4. 功能常用内置包
+
    - fmt io
    - bufio 对io包的封装，并提供了缓冲数据功能
    - sort 
@@ -233,7 +234,196 @@
    - ox/exec linux命令相关实现
    - reflect
    - bytes  log
+
 5. 自定义包
+
+   Go 编译速度快受益于以下三点：
+
+   - 所有导入的包必须在每个文件的开头显示的声明
+   - 禁止包的环状依赖，包的依赖关系会形成一个有向无环图，每个包可以独立编译，且很可能会并发编译
+   - 编译后的文件不仅记录了本身的导出信息，目标文件还记录了包的依赖关系。因此在编译一个包时，不需要遍历所有引入的包，只需要读取直接导入的目标文件即可。
+
+6. 包中的标识符，让外部的包可以访问包的类型和值
+
+   ```go
+   type MyStruct struct {
+     OutPackage int // 包外可用
+     innerPack string // 包内访问
+   }
+   type MyInterface interface {
+     ExportedMethod() // 包外
+     innerMethod()// 包内
+   }
+   ```
+
+6. import导入包
+   - 导入后自定义包名
+   - 只希望导入包，而不使用任何包内的结构和类型，也不调用包内的任何函数时，可以使用匿名导入包
+   - 包在程序启动前的初始化入口：init()会在main函数执行前执行，被最后导入的包会最先初始化并调用 init() 函数。
+
+7. 包与锁：限制线程对变量的访问
+
+   在处理并发过程中可能出现两个或多个协程读或写同一个变量的情况，因此sync包提供了互斥锁Mutex和读写锁RWMutex解决这个问题。
+
+   锁是sync包的核心，主要有两个方法，分别是加锁Lock和解锁Unlock
+
+   在并发情况下，使用锁可以保证在某一时间内，只有一个线程操作修改这一变量
+
+   **互斥锁**
+
+   一个互斥锁只能同时被一个协程锁定，其他协程将阻塞到互斥锁被解锁
+
+   ```go
+   func main() {
+     ch := make(chan, struct{}, 2)
+     var lock sync.Mutex
+     go func() {
+       lock.Lock()
+       defer lock.Unlock()
+       fmt.Println("协程1: 我会锁定两秒")
+       time.Sleep(time.Second * 2)
+       fmt.Println("协程1: 我解锁了，你们去抢锁吧")
+       ch <- struct{}{}
+     }()
+     go func() {
+       fmt.Println("协程2: 等待解锁中")
+       lock.Lock()
+       defer lock.Unlock()
+       fmt.Println("协程2: 我也解锁了")
+       ch <- struct{}{}
+     }()
+     for i := 0; i < 2; i++ {
+       <- ch
+     }
+   }
+   ```
+
+   **读写锁**
+
+   有以下特点：
+
+   - 一个协程在写，其他读或写锁定都要等它写完
+   - 一个协程在读，其他读锁定可以继续
+   - 一个或多个在读时，其他的写锁定要等这些读锁定读完才能开始写锁定
+
+   即同时只能有一个协程可以写锁定，同时可以有任意个读锁定，读和写互斥，只能同时存在读锁定或写锁定
+
+8. **big包**
+
+    math/big 包实现了大数字（超过int64 uint64且精度要求高时）的多精度计算，支持Int, Rat（有理数）,Float等
+
+   `big1 := new(big.Int).SetUint64(uint64(1000))`
+
+   因为go不支持运算符重载，所以所有大数字类型都有Add()和Mul()等这样的方法
+
+9. 正则表达式
+
+   ```go
+   buf := "abc a8b foa a99c"
+   reg1 := regexp.MustCompile(`a\dc`)
+   if reg1 == nil {
+     fmt.Println("regexp error")
+     return
+   }
+   result := reg1.FindAllStringSubmatch(buf, -1)
+   ```
+
+10. **time包**
+
+    - time.UTC  time.Local
+
+    - time.Now()
+
+      ```go
+      now := time.Now()
+      year := now.Year()
+      second := now.Second()
+      timestamp1 := now.Unix() //Unix 时间戳
+      timestamp2 := now.UnixNano() // 纳秒时间戳
+      weekday := now.Weekday().String() // "Tuesday"
+      afterOneHour := now.Add(time.Hour) // 当前时间往后推一小时
+      ```
+
+    - 时间操作函数
+
+      Sub 求两个时间的差值 `func (t Time) Sub(u Time) Duration`
+
+      Equal  比较两个时间是否相等，会考虑时区因素
+
+      Before 判断一个时间点是否在另一个时间点之前 `func (t Time) Before(u Time) bool`
+
+      After
+
+    - 定时器 time.Tick()，定时器的本质是一个通道
+
+    - 时间格式化，不是使用YYYY-MM-dd这一套，而是使用go的诞生时间**2006 年 1 月 2 号 15 点 04 分 05 秒**
+
+      ```go
+      now := time.Now()
+      // 24小时制格式化
+      now.Format("2006-01-02 15:04:05.000 Mon Jan")
+      now.Format("2006-01-02 03:04:05.000 PM Mon Jan") // 12小时制
+      ```
+
+    - 解析字符串格式的时间
+
+      ```go
+      var layout string = "2006-01-02 15:04:05"
+      var timeStr string = "2019-12-12 15:22:12"
+      timeObj1, _ := time.Parse(layout, timeStr)
+      fmt.Println(timeObj1)
+      timeObj2, _ := time.ParseInLocation(layout, timeStr, time.Local)
+      fmt.Println(timeObj2)
+      ```
+
+    11. **os包**
+
+    12. **flag包：**命令行参数解析
+
+        flag.Type()
+
+        flag.TypeVar()
+
+        flag.Parse()
+
+    13. **mod包管理工具使用**
+
+        - GO111MODULE=on 启用 go module，编译时会忽略 GOPATH 和 vendor 文件夹，只根据 go.mod下载依赖
+        - off则是从GOPATH和vendor文件夹下载
+        - auto，默认值，当项目不在GOPATH/src目录下，且根目录有go.mod文件时，会开启go modules
+
+        `export GO111MODULE=on`
+
+        常用go mod命令
+
+        | 命令            | 作用                                       |
+        | --------------- | ------------------------------------------ |
+        | go mod download | 将包下载到本地，默认为GOPATH/pkg/mod目录下 |
+        | go mod edit     |                                            |
+        | go mod graph    |                                            |
+        | go mod init     |                                            |
+        | go mod tidy     | 增加缺少包，删除无用包                     |
+        | go mod vendor   | 将依赖包复制到vendor目录下                 |
+        | go mod verify   | 校验依赖                                   |
+        | go mod why      | 解释为什么需要依赖                         |
+
+        **创建一个新项目**
+
+        `go mod init go-project1`
+
+        go 会自动生成一个 go.sum 文件来记录 dependency tree，
+
+        go module 安装 package 的原则是先拉取最新的 release tag，若无 tag 则拉取最新的 commit
+
+        `go list -m -u all`来检查可以升级的 package，使用`go get -u`升级所有依赖
+
+        使用replace替换无法直接获取的包
+
+        在 go.mod 文件中使用 replace 指令替换成 github 上对应的库
+
+        `replace (
+          golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a => github.com/golang/crypto v0.0.0-20190313024323-a1f597ede03a
+        )`
 
 
 
