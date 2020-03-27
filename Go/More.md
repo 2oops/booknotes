@@ -1,4 +1,4 @@
-**More about Golang**
+# More
 
 1. **time.Sleep  time.Tick()  time.newTicker()**的对比
 

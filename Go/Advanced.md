@@ -1,4 +1,4 @@
-**Go Advanced**
+# Advanced
 
 ***
 
@@ -256,12 +256,13 @@
    }
    ```
 
-6. import导入包
+7. import导入包
+
    - 导入后自定义包名
    - 只希望导入包，而不使用任何包内的结构和类型，也不调用包内的任何函数时，可以使用匿名导入包
    - 包在程序启动前的初始化入口：init()会在main函数执行前执行，被最后导入的包会最先初始化并调用 init() 函数。
 
-7. 包与锁：限制线程对变量的访问
+8. 包与锁：限制线程对变量的访问
 
    在处理并发过程中可能出现两个或多个协程读或写同一个变量的情况，因此sync包提供了互斥锁Mutex和读写锁RWMutex解决这个问题。
 
@@ -308,27 +309,27 @@
 
    即同时只能有一个协程可以写锁定，同时可以有任意个读锁定，读和写互斥，只能同时存在读锁定或写锁定
 
-8. **big包**
+9. **big包**
 
-    math/big 包实现了大数字（超过int64 uint64且精度要求高时）的多精度计算，支持Int, Rat（有理数）,Float等
+   math/big 包实现了大数字（超过int64 uint64且精度要求高时）的多精度计算，支持Int, Rat（有理数）,Float等
 
    `big1 := new(big.Int).SetUint64(uint64(1000))`
 
    因为go不支持运算符重载，所以所有大数字类型都有Add()和Mul()等这样的方法
 
-9. 正则表达式
+10. 正则表达式
 
-   ```go
-   buf := "abc a8b foa a99c"
-   reg1 := regexp.MustCompile(`a\dc`)
-   if reg1 == nil {
-     fmt.Println("regexp error")
-     return
-   }
-   result := reg1.FindAllStringSubmatch(buf, -1)
-   ```
+    ```go
+    buf := "abc a8b foa a99c"
+    reg1 := regexp.MustCompile(`a\dc`)
+    if reg1 == nil {
+      fmt.Println("regexp error")
+      return
+    }
+    result := reg1.FindAllStringSubmatch(buf, -1)
+    ```
 
-10. **time包**
+11. **time包**
 
     - time.UTC  time.Local
 
