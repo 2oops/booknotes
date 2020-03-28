@@ -75,5 +75,68 @@
 
    `atomic 和 sync`原子函数和互斥锁
 
-   
+6. 调整运行时的并发性能
 
+   `runtime.GOMAXPROCS(runtime.NumCPU())`
+
+   Go 在GOMAXPROCS数量和任务数量相等时，可以做到并行执行，大多数情况下都是并发执行
+
+7. goroutine和coroutine（Lua）的区别
+
+   Coroutine运行机制属于协作式任务处理，需要程序主动交出CPU的使用权，而这在开发者未在程序完成时设置交出使用权的时候就容易出现死机或失去响应。
+
+   goroutine属于抢占式任务处理，执行权交由操作系统，当某个任务处理时间过长，长时间占用大量CPU时，操作系统有权终止该任务。
+
+8. **channel**（FIFO队列）
+
+   go提倡用通信的方法代替共享内存，当一个资源需要在多个goroutine之间共享时，通道在goroutine之间架起一条管道，并确保数据能同步交换，声明通道（引用类型make）时，需要指定将要被共享的数据的类型。
+
+   在任何时候，只能有一个goroutine访问通道进行发送和获取数据，goroutine间通过通道就可以通信。
+
+   ```go
+   ch := make(chan interface{})
+   ch <- 0 // 发送0到接口通道
+   ch <- "hello" // 发送字符串到接口通道
+   data := <-ch // 执行到这里会阻塞，直到接收到数据并赋给data为止
+   data, ok := <-ch // 非阻塞接收数据
+   <- ch // 执行时发生阻塞，直到接收到数据，但会忽略接收的数据
+   
+   func main() {
+     ch := make(ch int)
+    // 开启一个匿名函数并发
+     go func() {
+       fmt.Println("start")
+       ch <- 0
+       fm.Println("end")
+     }()
+     fmt.Println("wait goroutine") // 匿名函数结束时通知另一个goroutine
+     <- ch // 等待匿名goroutine
+     fmt.Println("all done")
+   }
+   // wait goroutine
+   // start
+   // end
+   // all done
+   ```
+
+   **使用通道接收数据**
+
+   - 通道的收发操作需要在不同的两个goroutine中进行
+
+     如果发送方一直发送，而没有接收方处理，会造成阻塞，因此通道的接收方需要在另一个goroutine中进行
+
+   - 接收方将持续阻塞直到发送方发送数据
+
+     如果接收数据时，发送方一直没有发送数据，接收方也会发生阻塞，直到发送方发送数据为止
+
+   - 每次只接收一个数据
+
+     阻塞接收数据
+
+     非阻塞接收数据
+
+     接收任意数据，但忽略接收的数据
+
+     循环接收// 通道ch是可以进行遍历的
+
+   
