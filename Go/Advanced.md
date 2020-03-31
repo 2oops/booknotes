@@ -213,6 +213,38 @@
 
 6. 可变参数
 
+   ```go
+   import (
+   	"bytes"
+   )
+   func myfunc(args ...int) { // args为数组
+     
+   }
+   myfunc(1,2,3,4)
+   func myfunc2(args []int) {
+     
+   }
+   myfunc2([]int{1,2,3})
+   func myfunc3(args ...interface{}) { // 数组参数为任意类型
+     
+   }
+   func joinString(list ...string) string {
+     var b bytes.Buffer // 定义一个字节缓冲, 快速地连接字符串
+     for _, str := range list {
+       //str.(type))
+       b.WriteString(str)
+     }
+     return b.String()
+   }
+   func main() {
+     fmt.Println("aa","bb", "cc")
+   }
+   ```
+   
+   可变参数使用`...`进行传递与切片间使用 append 连接是同一个特性
+
+7. **defer**
+
    
 
 ***
