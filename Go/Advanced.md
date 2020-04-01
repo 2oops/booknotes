@@ -245,7 +245,79 @@
 
 7. **defer**
 
-   
+   多个defer行为被注册时，它们会逆序执行，类似行为被放入了一个延迟调用栈，后进先出
+
+   defer语句正好是函数退出时执行（函数返回前），故能很方便地处理资源释放的问题
+
+8. 递归函数
+
+   大事化小，小事化了，（大问题分为多个小问题，小问题各个击破）
+
+   **一定要有终止条件，否则就会无限调用下去，直到内存溢出**
+
+9. 运行时错误处理
+
+   go中错误处理被视为正常的开发环节，并没有类似java等的异常处理机制。
+
+   ```go
+   type error interface {
+     Error() string
+   }
+   // 错误字符串
+   var err = errors.New("this is a error!") // 建议在包内使用
+   ```
+
+10. 宕机
+
+    虽然go类型系统在编译时会捕获很多错误，但是空指针（变量没有地址指向）引用，数组访问越界等运行时错误会引起宕机，对于大部分漏洞而言，我们应该尽量使用go的错误机制，而不是panic。
+
+    `func panic(v interface{}) `
+
+    ```go
+    func main() {
+      panic("boom") // 手动触发宕机，运行后会将堆栈及goroutine打印到控制台
+    }
+    ```
+
+    宕机前，defer 语句会被优先执行
+
+11. 宕机恢复
+
+    `Recover`内建函数，调用 recover 可以捕获到 panic 的输入值，并且恢复正常的执行，类似其他try catch
+
+    ```go
+    func ProtectRun(entry func()) {
+        // 延迟处理的函数
+        defer func() {
+            // 发生宕机时，获取panic传递的上下文并打印
+            err := recover()
+            switch err.(type) {
+            case runtime.Error: // 运行时错误
+                fmt.Println("runtime error:", err)
+            default: // 非运行时错误
+                fmt.Println("error:", err)
+            }
+        }()
+        entry()
+    }
+    ```
+
+12. 计算函数的执行时间
+
+    time包的Since
+
+    ```go
+    start := time.Now() // 起点  获取当前时间
+    interval := time.Since(start) // 终点  interval即为时间间隔 ms
+    // 或者使用
+    interval := time.Now().Sub(start)
+    ```
+
+13. 功能测试函数
+
+    testing包=>单元测试 ，性能测试，覆盖率测试
+
+    `http://c.biancheng.net/view/5409.html`
 
 ***
 
