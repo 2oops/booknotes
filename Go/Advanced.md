@@ -323,9 +323,118 @@
 
 **结构体**
 
-***
+1. 定义
 
-**接口**
+   go可以自定义新的类型，结构体即是其中的一种复合类型，结构体是有n个任意类型的值聚合成的实体，每个值都是结构体的成员。
+
+   结构体的定义只是一种内存布局的描述，实例化时，才会真正的分配内存
+
+   ```go
+   type Color struct {
+     R, G ,B byte
+     x int
+     y int
+   }
+   ```
+
+2. 为结构体分配内存和初始化
+
+   实例与实例之间的内存是独立的
+
+   基本的实例化形式：`var p Person`
+
+   创建指针类型的结构体：`ins := new(T)` ins的类型为*T，属于指针
+
+   取结构体的地址实例化：`ins := &T{}`
+
+   取地址实例化是最广泛的一种方式
+
+   ```go
+   func newCommand(name string, varref *int, age int) *Command {
+     return &Command{
+       Name: name,
+       Var: varref,
+       Age: age
+     }
+   }
+   var version int = 1
+   cmd = newCommand("2oops", &version, 20)
+   ```
+
+3. 初始化结构体成员变量
+
+   有三种分别为：键值对填充，多值列表，初始匿名化结构体
+
+4. 构造函数
+
+   go类型和结构体没有构造函数的功能，但是可以使用结构体初始化来模拟。
+
+   构造函数的作用即是来初始化对象的，当变量比较多时，可以使用构造函数为对象成员赋初始值
+
+   ```go
+   // 模拟构造函数重载
+   type Cat struct {
+     Color string
+     Name  string
+   }
+   // 构造基类
+   func NewNameCat(name string) *Cat { // *对指针取值
+     return &Cat{ // &对变量取地址
+       Name: name
+     }
+   }
+   // 用户根据自己的需求，将参数使用函数传递到结构体构造参数中即可完成构造函数的任务
+   // 派生一个白猫
+   type WhiteCat struct {
+     Cat
+   }
+   // 构造子类
+   func NewWhiteCat(color string) *WhiteCat{
+     cat := &WhiteCat{}
+     cat.color = color
+     return cat
+   }
+   ```
+
+5. 结构体内嵌
+
+   相比于继承，go更青睐于组合
+
+   在一个结构体中对于每一种数据类型只能有一个匿名字段
+
+   内嵌的结构体可以访问其成员变量，内嵌结构体的字段名就是它的类型名？
+
+   ```go
+   type A struct {
+     x, y int
+   }
+   type B struct {
+     A
+     m, n float32
+   }
+   func main() {
+     b := B(a{1,2},3.1,4.2)
+     fmt.Println(b.x, b.A, b.m)
+   }
+   ```
+
+6. **垃圾回收机制**
+
+   内存不足时可调用`runtime.GC()`，但是可能造成程序端时间性能下降
+
+   `func SetFinalizer(x, f interface{})`
+
+   x是一个指向通过new申请的对象的指针，或者通过复合字面量取址得到的指针
+
+   该函数将x的终止器设置为f函数，当垃圾收集器发现x不再被使用或者间接使用时，会清理x并调用f
+
+   使用`SetFinalizer(x, nil)`来清理绑定到 x 上的终止器
+
+   终止器只有在对象被 GC 时，才会被执行。其他情况下，都不会被执行，即使程序正常结束或者发生错误
+
+7. 链表操作
+
+   
 
 ***
 
