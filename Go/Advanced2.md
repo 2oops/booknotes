@@ -258,10 +258,253 @@
 
 **接口**
 
-1. 
+1. 本身是调用方和实现方都需要遵守的一种协议（protocol)
+
+   非侵入式设计是 Go 语言设计师经过多年的大项目经验总结出来的设计之道，实现真正地解耦，提高编译速度，
+
+   **接口实现是隐式的，无须让实现接口的类型写出实现了哪些接口。这个设计被称为非侵入式设计**
+
+2. 接口定义：
+
+   go不是一种传统的面向对象的编程语言，没有类和继承等概念
+
+   ```go
+   type Writer struct {
+     Write(p []byte) (n int, err error)
+   }
+   ```
+
+3. 接口实现的条件：
+
+   接口的方法和实现接口的类型方法格式一致
+
+   接口中所有的方法均被实现
+
+   开发者唯一需要关注的就是**“我需要什么？”，以及“我能实现什么？”。**
+
+   一个类型可以实现多个接口，多个类型可以实现相同接口
+
+4. 类型断言
+
+   `value, ok := x.(T)`
+
+5. 接口嵌套组合
+
+   系统包中的嵌套组合
+
+   ```go
+   type Write interface {
+     Write(p []byte) (n int, err error)
+   }
+   type Closer interface {
+     Close() error
+   }
+   type WriteCloser interface {
+     Write // 注意没有括号
+     Closer
+   }
+   // 声明一个设备结构，然后实现写和关闭方法
+   type device struct {
+     
+   }
+   func (d *device) Write(p []byte) (n int, err error) {
+     return 0, nil
+   }
+   func (d *device) Close() error {
+     return nil
+   }
+   func main{
+     var wc io.WriteCloser = new(device)
+     wc.Write()
+     wc.Closer()
+     var writeonly io.Write = new(device)
+     writeonly.Write(nil) // 只有写方法
+   }
+   ```
+
+6. 类型分支判断基本类型/接口类型
+
+   ```go
+   // 伪代码
+   struct => func () a()
+   type b nterface {
+   	a()
+   }
+   // 分支判断
+   case b:
+   ```
+
+7. 空接口类型
+
+   ```go
+   // 空接口保存值
+   var any interface{}
+   any = 1
+   any = "hello"
+   // 从空接口取值
+   var a int = 1
+   var i interface{} = a
+   var b int = i.(int) // 这里若不使用类型断言会报错，因为i之前还是interface{}类型
+   ```
+
+   空接口可以比较，但是不能比较空接口中的动态值，如函数，切片，map，通道，数组，结构体
+
+8. 
 
 ***
 
 **文件处理**
 
 1. 
+
+***
+
+**编译与工具**
+
+1. go程序编写基本与源码的方式，GOPATH 作为工作目录和一套完整的工程目录规则，因此几乎不用额外配置
+
+   go build -o main exe main.go
+
+   go build -p 8 开启8核并发编译
+
+   go build -x 打印编译时会用到的所有命令
+
+   go build -v 编译时显示包名
+
+   go build -race 开启竞态检测
+
+   go build -a 强制重新构建
+
+2. go clean -i -n（java maven clean)
+
+   移除当前源码包和关联源码包里面编译生成的文件，包括以下几种：
+
+   - go build 生成的可执行文件及临时目录中的文件（`.o`,`.5`……）
+   - go test生成的`.test`， windows -> `.test.exe`
+   - go install 安装当前代码包时产生的结果文件/ pkg/ bin
+
+   参数解释：
+
+   - -i 清除安装的包和可运行文件，即go install 安装的文件
+   - -n 打印清除时用到的执行（rm rf等等）,但不执行清除操作
+   - -x 打印清除时的指令并执行清除操作
+   - -r 循环清除import引入的包
+   - -cache 删除go build时产生的缓存
+   - -testchace 删除当前包所有的测试结果
+
+3. go run
+
+   其不会在运行目录下生成任何文件，之所以能看到结果是执行的放在临时文件中的可执行文件，且后边添加的参数会以命令行输入提供给程序
+
+   不能使用`go run +包`的形式，如果需要这种效果，可以先build，在运行可执行文件
+
+4. gofmt
+
+   cli(Command language interpreter)命令语言解释程序，优先读取标准输入。
+
+   gofmt用tab表示缩进，不限制宽度，不会强制合并已换行的代码
+
+   传入文件路径，则格式化路径文件，传入目录，格式化目录下所有.go文件，不传，则格式化命令目录下所有.go文件
+
+   `go fmt`是gofmt的简单封装 -n（打印出内部要执行的`go fmt`的命令） -x （打印且执行）
+
+   - -l 仅把那些需要改写的源文件的绝对路径打印到标准输出，而不是改写后的内容
+   - -w 把改写后的内容直接写到文件中，而不是作为结果打印到标准输出
+   - -r rewrite重写规则，形如： gofmt -w -r "a + b -> b + a" main.go
+
+   - -d 只把diff后的对比信息打印到标准输出
+   - -e 打印所有语法错误，如果不使用此标记，只会打印每行的第一个错误，且只打印前十个错误
+   - -comments 是否保留注释，默认为true
+   - -tabwidth 默认为8，使标记生效要设置成false
+
+   - -tabs 是否使用 tab（'\t'）来代替空格表示缩进，默认为true
+   - -cpuprofile 是否记录CPU使用情况，并将记录内容保存在此标记值所指的文件中
+
+5. go install
+
+   将编译的中间文件放到GOPATH的pkg目录下，以及固定地将编译结果放在 GOPATH 的 bin 目录下
+
+   实际上完成了两步操作：生成执行文件，移动文件到目标目录下
+
+   该命令基于GOPATH，所以独立的目录是无法使用该命令
+
+   bin目录下的可执行文件的名称来自于编译时的包名
+
+   bin目录是固定的，无法使用-o来更改目标目录
+
+6. go get
+
+   远程拉取或更新代码包及其依赖包，并自动完成编译和安装
+
+   也是分了两步：下载源码包，执行go install
+
+   - -d downlod只下载不安装
+   - -u 强制使用网络更新包和依赖，下载丢失的包，但不会更新已经存在的包
+   - -f 必须包含-u，阻止-u去校验每个import中的包都已经获取了，适合fork项目的包、依赖更新
+   - -t 下载测试所需的包
+   - -fix 获取源码之后先fix 
+   - -v 显示执行的命令
+   - -insecure 允许http方式下载
+
+   `$ go get github.com/2oops/go-test`获取源码并编译
+
+7. go generate 在编译前自动生成某类代码
+
+   Unicode， HTML
+
+   - run 仅执行匹配了正则的命令
+   - -n -x -v
+
+   ```go
+   package main
+   import "fmt"
+   //go:generate go run main.go
+   //go:generate go version
+   func main() {
+       fmt.Println("http://c.biancheng.net/golang/")
+   }
+   ```
+
+   运行`go generate -x`
+
+   输出：go run main.go
+
+   http://c.biancheng.net/golang/
+
+   go version
+
+   go version go1.13.7 darwin/amd64
+
+8. go test
+
+   go有单元和性能测试系统
+
+   单元测试：
+
+   ​	标记单元测试结果：
+
+   ​	t.FailNow() 标记并终止当前用例
+
+   ​	t.Fail()标记但不终止当前用例
+
+   ​	t.Log()  t.Logf()  t.Error()  t.Errorf() 
+
+   ​	t.Fatal()打印致命错误并结束测试
+
+   ​	t.Fatalf()
+
+   基准测试：
+
+   ​	测试代码需要保证函数可重入性及无状态，即测试代码不使用全局变量等带有记忆性质的数据结构
+
+   原理：框架对一个测试用例的默认时间是1s，开始时，用例函数返回时不到1s，那么N值将不断增加，1，2，5，10，20，50...，同时递增后的值重新调用基准测试用例函数
+
+   控制计时器
+
+   b.ResetTimer()  StopTimer()   StartTimer()   计数器内部不仅包含耗时数据，还包括内存分配的数据
+
+9. gopprof
+
+   graphviz
+
+   github.com/pkg/profile 
