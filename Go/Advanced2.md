@@ -398,6 +398,69 @@
 
    反射功能强大但代码可读性并不理想，若非必要并不推荐使用反射
 
+   **reflect包**
+
+   ```go
+   func main() {
+   	var a int
+     typeOfA := reflect.TypeOf(a)
+     fmt.Println(typeOfA.Name(), typeOfA.Kind()) // 类型名和种类名，均为int
+   }
+   ```
+
+   对指针获取反射对象时，可以通过 reflect.Elem() 方法获取这个指针指向的元素类型，这个获取过程被称为取元素，等效于对指针类型变量做了一个`*`操作。
+
+2. 反射三定律
+
+   第一定律：反射可以将“接口类型变量”转换成“反射类型对象”
+
+   反射类型指 reflect.Type 和 reflect.Value
+
+   ```go
+   func main() {
+       var x float64 = 3.4
+       fmt.Println("type:", reflect.TypeOf(x))
+       fmt.Println("value:", reflect.ValueOf(x))
+       v := reflect.ValueOf(x)
+       v.CanSet() // false 对应第三定律
+       p := reflect.ValueOf(&x)
+       e := p.Elem()
+       e.CanSet() // true
+       e.SetFloat(2.0)
+       fmt.Println(v.Interface()) // 2.0
+       fmt.Println(x) // 2.0
+   }
+   ```
+
+   reflect.TypeOf(x) 时，x 被存储在一个空接口变量中被传递过去，然后 reflect.TypeOf 对空接口变量进行拆解，恢复其类型信息。
+
+   第二定律：反射可以将“反射类型对象”转换为“接口类型变量”
+
+   第三定律：如果要修改“反射类型对象”其值必须是“可写的”
+
+   如果想要改变，参考函数的传参，参数若要改变，需要传参数的地址，f(&x)，反射机制与此相同，要把想要修改的变量的指针传递给反射库。
+
+   使用反射修改结构体的字段，只要有结构体的指针，我们就可以修改它的字段，如下
+
+   ```go
+   type T struct {
+     A int
+     B string
+   }
+   t := { 20, "2oops"}
+   e := reflect.ValueOf(&t).Elem()
+   typeOfT := e.Type()
+   for i := 0; i < e.NumField(); i ++ {
+     f := e.Field(i)
+     fmt.Println(i, typeOfT.Field(i).Name, f.Interface()) // 0 A int 20.  1 B string 2oops
+   }
+   e.Field(0).SetInt(21)
+   e.Field(1).SetString("oops")
+   fmt.Println(t) // {21 oops}
+   ```
+
+   
+
 ***
 
 **编译与工具**
