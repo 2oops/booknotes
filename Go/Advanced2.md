@@ -401,9 +401,21 @@
    **reflect包**
 
    ```go
+   const (
+   	Zero Enum = 0
+   )
+   type cat struct {
+   }
    func main() {
    	var a int
      typeOfA := reflect.TypeOf(a)
+     typeOfB := reflect.TypeOf(Zero)
+     typeOfcat := reflect.TypeOf(cat{})
+     ptr := &cat{}
+     typeOfPtr := reflect.TypeOf(ptr)
+     fmt.Println(typeOfPtr.Name(), typeOfPtr.Kind()) // 空 ptr
+     fmt.Println(typeOfA.Name(), typeOfA.Kind()) // cat struct
+     fmt.Println(typeOfA.Name(), typeOfA.Kind()) // Enum int
      fmt.Println(typeOfA.Name(), typeOfA.Kind()) // 类型名和种类名，均为int
    }
    ```
@@ -424,7 +436,7 @@
        v := reflect.ValueOf(x)
        v.CanSet() // false 对应第三定律
        p := reflect.ValueOf(&x)
-       e := p.Elem()
+       e := p.Elem() // 取值指向的元素值，类似于语言层*操作
        e.CanSet() // true
        e.SetFloat(2.0)
        fmt.Println(v.Interface()) // 2.0
@@ -459,7 +471,82 @@
    fmt.Println(t) // {21 oops}
    ```
 
-   
+3. 通过反射获取结构体成员类型
+
+4. 结构体标签
+
+   ```go
+   func main() {
+       type cat struct {
+           Name string
+           Type int `json:"type" id:"100"` // 注意json:后面不能有空格
+       }
+       typeOfCat := reflect.TypeOf(cat{})
+       if catType, ok := typeOfCat.FieldByName("Type"); ok {
+           fmt.Println(catType.Tag.Get("json"))
+       }
+   }
+   ```
+
+5. 从反射值获取被包装的值
+
+   ```go
+   func main() {
+       // 声明整型变量a并赋初值
+       var a int = 1024
+       // 获取变量a的反射值对象
+       valueOfA := reflect.ValueOf(a)
+       // 获取interface{}类型的值, 通过类型断言转换
+       var getA int = valueOfA.Interface().(int)
+       // 获取64位的值, 强制类型转换为int类型
+       var getA2 int = int(valueOfA.Int())
+       fmt.Println(getA, getA2)
+   }
+   ```
+
+6. IsNil()和IsValid()——判断反射值的空和有效性
+
+   IsNil()如果值类型不是通道（channel）、函数、接口、map、指针或 切片时发生 panic
+
+   ```go
+   var a *int
+   fmt.Println(reflect.ValueOf(a).IsNil()) // true
+   fmt.Println(reflect.ValueOf(nil).IsValid()) // false
+   ```
+
+7. 通过类型信息创建实例
+
+   ```go
+   func main() {
+       var a int
+       // 取变量a的反射类型对象
+       typeOfA := reflect.TypeOf(a)
+       // 根据反射类型对象创建类型实例
+       aIns := reflect.New(typeOfA)
+       // 输出Value的类型和种类
+       fmt.Println(aIns.Type(), aIns.Kind()) // *int ptr
+   }
+   ```
+
+8. 通过反射调用函数
+
+   ```go
+   func add(a, b int) int {
+       return a + b
+   }
+   func main() {
+       // 将函数包装为反射值对象
+       funcValue := reflect.ValueOf(add)
+       // 构造函数参数
+       paramList := []reflect.Value{reflect.ValueOf(10), reflect.ValueOf(20)}
+       // 反射调用函数
+       retList := funcValue.Call(paramList)
+       // 获取第一个返回值, 取整数值
+       fmt.Println(retList[0].Int()) // 30
+   }
+   ```
+
+9. Inject库 依赖注入
 
 ***
 
