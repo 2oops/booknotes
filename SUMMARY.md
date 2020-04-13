@@ -40,6 +40,7 @@
 * Webpack
     * [Base](Webpack/Base.md)
     * [Advanced](Webpack/Advanced.md)
+    * [Babel](Webpack/Babel.md)
 * WebGL
     * [ThreeJs](WebGL/ThreeJs.md)
     * [Cesium](WebGL/Cesium.md)
