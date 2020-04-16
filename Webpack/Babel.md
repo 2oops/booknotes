@@ -18,4 +18,26 @@
 
    ` .babelrc`文件需要的配置项主要有预设(presets)和插件(plugins)，`babel6.X`版本之后，所有的插件都是可插拔的，也就是说只安装babel依然无法正常的工作，我们需要配置对应的.babelrc文件才能起作用。
 
+5. 插件的使用
+
+   ```js
+   // 直接写插入名称
+   //.babelrc
+   {
+       "plugins": ["@babel/plugin-transform-arrow-functions"]
+   }
+   // 或指定插件的相对/绝对路径
+   {
+       "plugins": ["./node_modules/@babel/plugin-transform-arrow-functions"]
+   }
    
+   ```
+
+6. presets的妙用
+
+   通过使用或创建一个 `preset` 即可**轻松**使用一组插件。它会根据配置的目标环境，生成插件列表来编译
+
+   @babel/preset-env 主要作用是对当前使用的和目标浏览器缺失的功能进行代码转换和加载polyfill，在不进行任何配置的情况下，其包含的插件将支持除stage阶段的最新特性。
+
+   
+
