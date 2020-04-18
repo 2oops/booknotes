@@ -39,5 +39,17 @@
 
    @babel/preset-env 主要作用是对当前使用的和目标浏览器缺失的功能进行代码转换和加载polyfill，在不进行任何配置的情况下，其包含的插件将支持除stage阶段的最新特性。
 
-   
+7. polyfill
+
+8. ### @babel/plugin-transform-runtime-runtime
+
+   一个可以重复使用 `Babel` 注入的帮助程序，以降低代码大小的插件
+
+9. 插件的执行顺序
+
+   - 插件在presets前运行
+   - plugins顺序从前往后执行
+   - presets里面的插件从后往前执行
+
+
 
