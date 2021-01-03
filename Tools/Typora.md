@@ -67,3 +67,47 @@ Ctrl + L 选中当前行
 | 3    | 3    |
 | 3    | 3    |
 
+```diff
+// array deduplication
+const list = arr => {
+- return Array.from(new Set(arr))
++ return [...new Set(arr)]
+}
+```
+
+Todo list
+
+- [ ] do something
+- [x] done
+- [ ] ~~didn't complete~~
+
+set Width and height for picture
+
+![descriptions from picture](https://unsplash.com/photos/_6UOe1IcGzg)
+
+<img src='https://' width=400px height=300px />
+
+<img src='https://' width=40% />
+
+Fold
+
+<details>
+  <summary>expand</summary>
+  contents<br>
+  contents<br>
+  contents
+</details>
+
+
+
+[click here to the directory](#tree)
+
+<a href='#tree'>chapter one</a>
+
+[TOC]
+
+toc table of contents
+
+newline
+
+<br>
