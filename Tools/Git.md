@@ -293,3 +293,30 @@
     - 我们需要：`git fetch origin dev` 命令来把远程分支拉到本地
     - 然后使用：`git checkout -b dev origin/dev` 在本地创建分支dev并切换到该分支
     - 最后使用：`git pull origin dev` 就可以把某个分支上的内容都拉取到本地了
+    
+15. git tag
+
+    git tag 冲突提交不上去
+    
+    ```
+    ! [rejected] ... (already exists)
+    hint: Updates were rejected because the tag already exists in the remote.
+    ```
+    
+    解决方法：
+
+    将所有的tags pull 下来，直接覆盖
+    
+    ```
+    git pull --tags -f
+    ```
+    
+15. dev脏分支用master分支覆盖
+
+    当dev分支过于脏乱，以至于我们想用master分支直接覆盖时，可以这样做
+    
+    ```
+    git reset --hard origin/master
+    git pull origin dev -f
+    ```
+
